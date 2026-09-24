@@ -1,0 +1,340 @@
+==================================================================================
+simulate_ccat.py — FYST/Prime-Cam 850 GHz (353 um), GPD tail of the CIB
+==================================================================================
+FORECAST ARM.  No data exist; every instrument number traces to
+CCAT-prime Collaboration (2023) Table 1.  Band = 850 GHz, NOT the
+Prime-Cam channel named '350 GHz' (857 um, 37" beam).
+==================================================================================
+CCAT — noise budget at S_min = 1.0 mJy (audit R1), S_cut = 100 mJy
+==================================================================================
+  <CCAT: 15.00" beam, 3.0" pix, sigma_N=3.100, S_cut=100 mJy>
+  provenance: CCAT-prime Collaboration (2023) Table 1: 850 GHz (353 um) broadband module, beam 15 arcsec; sigma_survey/beam 3100 uJy (Q1) and 4900 uJy (Q1-Q3) for the 100 deg^2 / 500 h DSFG survey. FORECAST ONLY — no data exist.
+
+     model   sigma_c   sigma_N  sigma_nonP  Sigma_tot    N_beam    skew  s_split  f_N impl
+ Schechter      4.76      3.10         0.0       5.68       1.7    2.97     1.00     0.652
+       SPL      5.97      3.10         0.0       6.73      12.1    1.59     1.00     0.519
+       DPL      4.52      3.10         0.0       5.48       0.7    3.49     1.00     0.685
+  counts fitted over S = 6.0-94.6 mJy; NO renormalisation applied anywhere (audit R4).
+
+  Self-consistent confusion limit, S_lim = 5 sigma_c(S_lim) (audit Sec. 5.3):
+    at 15"     Schechter 17.5 / 3.49   SPL 27.2 / 5.45   DPL 15.4 / 3.07   [S_lim / sigma_c, mJy]
+    at 25.15"  Schechter 36.2 / 7.24   SPL 47.8 / 9.56   DPL 33.4 / 6.68   vs Nguyen's 31.5 / 6.3
+    -> our Herschel-to-CCAT flux gain is 2.1x; the CCAT paper claims ~3x from
+       Bethermin et al. (2017).  We are the more conservative of the two.
+
+  Dynamic range S_cut / sigma_c = 21.0 (Schechter), against 12.5 at Herschel and 1.1 at Planck.
+----------------------------------------------------------------------------------
+CCAT — benchmark lens apertures
+----------------------------------------------------------------------------------
+NFW benchmark: M_500 = 1.000e+15 Msun at z_l = 0.5, z_s = 2.0
+  -> R_500 = 1.293 Mpc, theta_500 = 3.425', M_vir = 1.7945e+15 Msun, c_vir = 3.503
+  beam = 15.00" = 0.250', theta_500 = 3.425'  -> theta_500 / FWHM = 13.70
+
+ r/theta500  r [arcmin]     <mu>   <ln mu>     beams  peaks/cl
+       0.50       1.713   3.0707    0.6903     130.1      32.5
+       1.00       3.425   1.6572    0.2994     520.5     130.1
+       1.50       5.138   1.3283    0.1680    1171.0     292.8
+       2.00       6.850   1.1917    0.1016    2081.8     520.5
+
+  peaks/cluster = pi r^2 / (4 Omega_beam): declustered maxima occur at ~1 per 4 beam solid angles, not 1 per beam.
+
+  theta_500 / FWHM = 13.7: the benchmark cluster spans ~14 beams,
+  so even the r < 0.5 theta_500 aperture — where <mu> = 3.07 — is well resolved.  This
+  is the structural advantage of the CCAT arm over both others.
+==================================================================================
+CCAT — UNLENSED xi(u):  50 maps of 512^2 at 3.0" = 9.10 deg^2 total
+==================================================================================
+  thresholds [mJy/beam]: 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 15.0, 18.0, 22.0, 26.0, 31.0, 37.0, 45.0, 55.0
+  [cache] unlscan_CCAT_Schechter_e74bf9341a.pkl
+  [cache] unlth_CCAT_Schechter_e74bf9341a.pkl
+   Schechter   114899 peaks (0.248/beam)  MC rms    5.68 vs analytic Sigma_tot    5.68  ratio 1.001   [0s]
+              n_exc = 31575, 27623, 24130, 21072, 18355, 15989, 13958, 9532, 6589, 4100, 2602, 1562, 872, 431, 188
+  [cache] unlscan_CCAT_SPL_e74bf9341a.pkl
+  [cache] unlth_CCAT_SPL_e74bf9341a.pkl
+         SPL   118038 peaks (0.255/beam)  MC rms    6.74 vs analytic Sigma_tot    6.73  ratio 1.002   [0s]
+              n_exc = 39230, 35285, 31385, 27610, 24063, 20736, 17715, 10956, 6721, 3749, 2287, 1341, 853, 488, 263
+  [cache] unlscan_CCAT_DPL_e74bf9341a.pkl
+  [cache] unlth_CCAT_DPL_e74bf9341a.pkl
+         DPL   113722 peaks (0.246/beam)  MC rms    5.51 vs analytic Sigma_tot    5.48  ratio 1.005   [0s]
+              n_exc = 30619, 26963, 23659, 20789, 18151, 15895, 13843, 9185, 6144, 3765, 2386, 1423, 844, 438, 220
+  wrote /sessions/happy-intelligent-dirac/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/ccat/ccat_unlensed_xi.png
+----------------------------------------------------------------------------------
+CCAT — weather leg: sigma_N = 4.9 mJy/beam (Q1-Q3 average)
+----------------------------------------------------------------------------------
+  The Q1 value assumes the DSFG survey runs in best-quartile PWV, which the paper
+  states as the plan.  The weather-averaged depth is 58% worse, and at 850 GHz the
+  atmosphere is the dominant term, so this leg brackets the realistic outcome.
+==================================================================================
+CCAT [q13] — UNLENSED xi(u):  50 maps of 512^2 at 3.0" = 9.10 deg^2 total
+==================================================================================
+  thresholds [mJy/beam]: 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 15.0, 18.0, 22.0, 26.0, 31.0, 37.0, 45.0, 55.0
+  [cache] unlscan_CCAT_Schechterq13_e74bf9341a.pkl
+  [cache] unlth_CCAT_Schechterq13_e74bf9341a.pkl
+   Schechter   116296 peaks (0.251/beam)  MC rms    6.84 vs analytic Sigma_tot    6.83  ratio 1.001   [0s]
+              n_exc = 38986, 35106, 31229, 27487, 24015, 20953, 18205, 11897, 7942, 4727, 2949, 1669, 905, 444, 178
+  [cache] unlscan_CCAT_SPLq13_e74bf9341a.pkl
+  [cache] unlth_CCAT_SPLq13_e74bf9341a.pkl
+         SPL   117955 peaks (0.255/beam)  MC rms    7.74 vs analytic Sigma_tot    7.72  ratio 1.002   [0s]
+              n_exc = 43118, 39907, 36486, 32984, 29604, 26204, 22971, 14799, 9252, 4917, 2842, 1582, 948, 515, 278
+  [cache] unlscan_CCAT_DPLq13_e74bf9341a.pkl
+  [cache] unlth_CCAT_DPLq13_e74bf9341a.pkl
+         DPL   116033 peaks (0.251/beam)  MC rms    6.70 vs analytic Sigma_tot    6.67  ratio 1.004   [0s]
+              n_exc = 38206, 34110, 30270, 26538, 23084, 20178, 17561, 11295, 7415, 4449, 2745, 1585, 910, 475, 244
+  wrote /sessions/happy-intelligent-dirac/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/ccat/ccat_unlensed_xi_q13.png
+
+     model  Sig_tot Q1  Sig_tot Q1-Q3   ratio
+ Schechter       5.678          6.829   1.203
+       SPL       6.726          7.723   1.148
+       DPL       5.483          6.668   1.216
+----------------------------------------------------------------------------------
+CCAT — analytic $\Delta\xi(u)$ of the benchmark lens
+----------------------------------------------------------------------------------
+ r/th500      model    <mu>       6.0       7.0       8.0       9.0      10.0      11.0      12.0      15.0      18.0      22.0      26.0      31.0      37.0      45.0      55.0
+  [cache] thc_CCAT_Schechter_e74bf9341a.pkl
+  [cache] thl_CCAT_Schechter_0.5_e74bf9341a.pkl
+    0.50  Schechter   3.071   0.05785   0.05145   0.04558   0.04043   0.03545   0.03072   0.02630   0.01297  -0.00009  -0.01739  -0.03325  -0.04960  -0.05531  -0.01266  -0.00990
+  [cache] thc_CCAT_SPL_e74bf9341a.pkl
+  [cache] thl_CCAT_SPL_0.5_e74bf9341a.pkl
+    0.50        SPL   3.071  -0.14906  -0.16996  -0.19137  -0.21109  -0.23073  -0.24882  -0.26037  -0.27066  -0.24758  -0.17678  -0.08893   0.00921   0.09292   0.08337   0.03209
+  [cache] thc_CCAT_DPL_e74bf9341a.pkl
+  [cache] thl_CCAT_DPL_0.5_e74bf9341a.pkl
+    0.50        DPL   3.071   0.03617   0.02247   0.01067   0.00055  -0.00869  -0.01709  -0.02450  -0.04320  -0.05584  -0.06466  -0.06524  -0.05804  -0.03968  -0.00427  -0.00331
+  [cache] thc_CCAT_Schechter_e74bf9341a.pkl
+  [cache] thl_CCAT_Schechter_1.0_e74bf9341a.pkl
+    1.00  Schechter   1.657   0.03579   0.03333   0.03113   0.02928   0.02748   0.02576   0.02415   0.01880   0.01282   0.00370  -0.00606  -0.01818  -0.03078  -0.00806  -0.00621
+  [cache] thc_CCAT_SPL_e74bf9341a.pkl
+  [cache] thl_CCAT_SPL_1.0_e74bf9341a.pkl
+    1.00        SPL   1.657  -0.07747  -0.08589  -0.09445  -0.10205  -0.10927  -0.11527  -0.11907  -0.11732  -0.09028  -0.03092   0.02216   0.05430   0.05928   0.00058  -0.00126
+  [cache] thc_CCAT_DPL_e74bf9341a.pkl
+  [cache] thl_CCAT_DPL_1.0_e74bf9341a.pkl
+    1.00        DPL   1.657   0.02121   0.01511   0.00967   0.00489   0.00041  -0.00373  -0.00746  -0.01714  -0.02396  -0.02897  -0.02976  -0.02687  -0.02033  -0.00195  -0.00151
+  [cache] thc_CCAT_Schechter_e74bf9341a.pkl
+  [cache] thl_CCAT_Schechter_1.5_e74bf9341a.pkl
+    1.50  Schechter   1.328   0.02298   0.02173   0.02066   0.01981   0.01901   0.01824   0.01754   0.01505   0.01202   0.00693   0.00101  -0.00704  -0.01652  -0.00569  -0.00427
+  [cache] thc_CCAT_SPL_e74bf9341a.pkl
+  [cache] thl_CCAT_SPL_1.5_e74bf9341a.pkl
+    1.50        SPL   1.328  -0.03984  -0.04506  -0.05038  -0.05510  -0.05951  -0.06304  -0.06507  -0.06168  -0.04173  -0.00485   0.02046   0.02969   0.02797   0.00016  -0.00066
+  [cache] thc_CCAT_DPL_e74bf9341a.pkl
+  [cache] thl_CCAT_DPL_1.5_e74bf9341a.pkl
+    1.50        DPL   1.328   0.01331   0.00983   0.00670   0.00391   0.00129  -0.00117  -0.00340  -0.00924  -0.01341  -0.01650  -0.01704  -0.01543  -0.01181  -0.00112  -0.00087
+  [cache] thc_CCAT_Schechter_e74bf9341a.pkl
+  [cache] thl_CCAT_Schechter_2.0_e74bf9341a.pkl
+    2.00  Schechter   1.192   0.01535   0.01472   0.01419   0.01380   0.01343   0.01308   0.01276   0.01154   0.00989   0.00688   0.00314  -0.00228  -0.00917  -0.00424  -0.00305
+  [cache] thc_CCAT_SPL_e74bf9341a.pkl
+  [cache] thl_CCAT_SPL_2.0_e74bf9341a.pkl
+    2.00        SPL   1.192  -0.02535  -0.02877  -0.03224  -0.03528  -0.03806  -0.04019  -0.04123  -0.03753  -0.02276   0.00134   0.01520   0.01849   0.01650   0.00008  -0.00039
+  [cache] thc_CCAT_DPL_e74bf9341a.pkl
+  [cache] thl_CCAT_DPL_2.0_e74bf9341a.pkl
+    2.00        DPL   1.192   0.00908   0.00696   0.00502   0.00328   0.00161   0.00004  -0.00139  -0.00521  -0.00800  -0.01015  -0.01064  -0.00978  -0.00765  -0.00072  -0.00056
+  wrote /sessions/happy-intelligent-dirac/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/ccat/ccat_lensed_theory.png
+==================================================================================
+CCAT — LENSED Monte Carlo: 120 copies of the benchmark, 384^2 cutouts at 3.0" (19.2' across), model = Schechter
+==================================================================================
+  360 cutouts built [0s]
+
+ r/th500  pk/cl lens  pk/cl ctrl  yield est
+    0.50       30.42       31.34      32.53
+    1.00      123.50      125.73     130.11
+    1.50      280.48      283.27     292.76
+    2.00      498.93      502.50     520.45
+  [cache] lscan_CCAT_lens_0.5_e74bf9341a.pkl
+  [cache] lscan_CCAT_ctrl_0.5_e74bf9341a.pkl
+  [cache] lscan_CCAT_null_0.5_e74bf9341a.pkl
+
+  aperture r < 0.5 theta_500 = 1.713'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+          6.0    2264    0.0975    0.1432   +0.04573  0.03078   +0.02363  0.03326
+          7.0    2050    0.0914    0.1461   +0.05473  0.03063   +0.03977  0.03295
+          8.0    1837    0.0978    0.1336   +0.03583  0.03237   +0.03157  0.03776
+          9.0    1659    0.0827    0.1264   +0.04376  0.03406   +0.04721  0.04241
+         10.0    1527    0.0811    0.1411   +0.06001  0.03614   +0.03179  0.04325
+         11.0    1409    0.0778    0.1618   +0.08402  0.03958   +0.02566  0.04684
+         12.0    1284    0.0675    0.1687   +0.10116  0.04034   +0.03624  0.04938
+         15.0     960    0.0712    0.1669   +0.09565  0.05205   -0.01061  0.05793
+         18.0     720    0.1089    0.1494   +0.04049  0.06347   -0.06988  0.07124
+         22.0     505    0.1233    0.1130   -0.01039  0.07234   -0.11005  0.08298
+         26.0     361    0.2125    0.0393   -0.17319  0.11951   -0.22484  0.11941
+         31.0     252    0.0148   -0.0335   -0.04833  0.10840   +0.00031  0.12335
+         37.0     167        --        --           (below N_exc floor)
+         45.0     103        --        --           (below N_exc floor)
+         55.0      56        --        --           (below N_exc floor)
+    NULL check |Dxi|/sigma: max 1.88  PASS
+  [cache] lscan_CCAT_lens_1.0_e74bf9341a.pkl
+  [cache] lscan_CCAT_ctrl_1.0_e74bf9341a.pkl
+  [cache] lscan_CCAT_null_1.0_e74bf9341a.pkl
+
+  aperture r < 1.0 theta_500 = 3.425'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+          6.0    8486    0.0966    0.1206   +0.02401  0.01510   -0.01003  0.01464
+          7.0    7577    0.1097    0.1263   +0.01658  0.01502   -0.01662  0.01495
+          8.0    6736    0.1199    0.1250   +0.00508  0.01651   -0.02616  0.01615
+          9.0    5999    0.1202    0.1231   +0.00288  0.01880   -0.02131  0.01830
+         10.0    5377    0.1237    0.1275   +0.00380  0.02033   -0.03267  0.02219
+         11.0    4806    0.1231    0.1276   +0.00451  0.02191   -0.03098  0.02399
+         12.0    4285    0.1298    0.1217   -0.00808  0.02243   -0.03185  0.02708
+         15.0    3101    0.1158    0.1144   -0.00137  0.02798   -0.06142  0.03279
+         18.0    2279    0.0983    0.1111   +0.01277  0.03379   -0.04773  0.03745
+         22.0    1540    0.1012    0.0965   -0.00468  0.04277   -0.09038  0.04720
+         26.0    1056    0.0942    0.0661   -0.02814  0.05275   -0.08089  0.05957
+         31.0     695    0.0640    0.0597   -0.00435  0.06353   -0.10123  0.07315
+         37.0     417    0.1364    0.0012   -0.13525  0.08318   -0.18252  0.08678
+         45.0     222   -0.1349   -0.1073   +0.02758  0.13894   +0.05412  0.21046
+         55.0     111        --        --           (below N_exc floor)
+    NULL check |Dxi|/sigma: max 2.10  PASS
+  [cache] lscan_CCAT_lens_1.5_e74bf9341a.pkl
+  [cache] lscan_CCAT_ctrl_1.5_e74bf9341a.pkl
+  [cache] lscan_CCAT_null_1.5_e74bf9341a.pkl
+
+  aperture r < 1.5 theta_500 = 5.138'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+          6.0   18792    0.1083    0.1185   +0.01016  0.01037   -0.01520  0.01087
+          7.0   16625    0.1214    0.1250   +0.00356  0.01082   -0.02301  0.01115
+          8.0   14671    0.1278    0.1276   -0.00017  0.01213   -0.02031  0.01267
+          9.0   12928    0.1276    0.1265   -0.00112  0.01385   -0.01316  0.01516
+         10.0   11472    0.1299    0.1320   +0.00207  0.01492   -0.01601  0.01699
+         11.0   10134    0.1321    0.1299   -0.00218  0.01568   -0.01346  0.01749
+         12.0    8963    0.1351    0.1264   -0.00869  0.01745   -0.01104  0.01996
+         15.0    6284    0.1221    0.1147   -0.00742  0.01997   -0.01158  0.02390
+         18.0    4494    0.1064    0.1018   -0.00462  0.02220   -0.00085  0.02779
+         22.0    2962    0.0848    0.0829   -0.00190  0.02846   -0.02862  0.03199
+         26.0    2001    0.0492    0.0586   +0.00941  0.03534   -0.01163  0.03818
+         31.0    1275    0.0438    0.0426   -0.00120  0.04275   -0.04032  0.04238
+         37.0     753    0.0658    0.0080   -0.05783  0.05929   -0.06241  0.05138
+         45.0     385   -0.0074   -0.0822   -0.07488  0.09196   -0.04435  0.10034
+         55.0     181   -0.3218   -0.2286   +0.09322  0.12851   +0.29680  0.14310
+    NULL check |Dxi|/sigma: max 2.07  PASS
+  [cache] lscan_CCAT_lens_2.0_e74bf9341a.pkl
+  [cache] lscan_CCAT_ctrl_2.0_e74bf9341a.pkl
+  [cache] lscan_CCAT_null_2.0_e74bf9341a.pkl
+
+  aperture r < 2.0 theta_500 = 6.850'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+          6.0   32883    0.1118    0.1127   +0.00085  0.00827   -0.01406  0.00830
+          7.0   29039    0.1217    0.1228   +0.00112  0.00862   -0.01714  0.00858
+          8.0   25548    0.1243    0.1290   +0.00472  0.00934   -0.01387  0.00949
+          9.0   22467    0.1234    0.1338   +0.01042  0.01008   -0.00606  0.01032
+         10.0   19773    0.1245    0.1380   +0.01356  0.01083   -0.00691  0.01105
+         11.0   17341    0.1272    0.1357   +0.00854  0.01193   -0.00876  0.01176
+         12.0   15230    0.1281    0.1312   +0.00310  0.01270   -0.00305  0.01281
+         15.0   10531    0.1255    0.1248   -0.00064  0.01575   -0.00861  0.01632
+         18.0    7378    0.1082    0.1056   -0.00260  0.01961   -0.00431  0.01956
+         22.0    4775    0.0994    0.0831   -0.01624  0.02327   -0.03980  0.02456
+         26.0    3199    0.0790    0.0621   -0.01694  0.02683   -0.02979  0.02715
+         31.0    1994    0.0601    0.0316   -0.02854  0.03626   -0.02212  0.03744
+         37.0    1176    0.0542    0.0173   -0.03689  0.04262   -0.00889  0.04990
+         45.0     587   -0.0306   -0.0837   -0.05311  0.06172   -0.01898  0.07269
+         55.0     271   -0.3102   -0.2081   +0.10206  0.08789   +0.22877  0.09466
+    NULL check |Dxi|/sigma: max 2.42  PASS
+==================================================================================
+CCAT — FORECAST: benchmark clusters needed for 3-sigma
+==================================================================================
+  signal  = analytic Delta_xi(u) for ONE cluster (Schechter counts)
+  noise   = MC bootstrap sigma on Delta_xi from 120 copies, rescaled to one cluster by sqrt(N)
+  N_infl  = the same with variance inflated by 2^2, because Poisson simulations under-scatter
+            the exceedance counts of a clustered sky by ~2x in rms (v2 memo Sec. 10.6).  QUOTE N_infl.
+
+ r/th500         u  Dxi_theory    sigma_1      N(3sig)       N_infl
+     0.5       6.0    +0.05785     0.3371    3.056e+02    1.223e+03  <-- best
+               7.0    +0.05145     0.3355    3.826e+02    1.531e+03
+               8.0    +0.04558     0.3546    5.446e+02    2.178e+03
+               9.0    +0.04043     0.3731    7.666e+02    3.066e+03
+              10.0    +0.03545     0.3959    1.122e+03    4.488e+03
+              11.0    +0.03072     0.4336    1.793e+03    7.174e+03
+              12.0    +0.02630     0.4419    2.540e+03    1.016e+04
+              15.0    +0.01297     0.5702    1.739e+04    6.955e+04
+              18.0    -0.00009     0.6953    4.985e+08    1.994e+09
+              22.0    -0.01739     0.7924    1.868e+04    7.474e+04
+              26.0    -0.03325     1.3092    1.395e+04    5.580e+04
+              31.0    -0.04960     1.1875    5.158e+03    2.063e+04
+
+     1.0       6.0    +0.03579     0.1654    1.923e+02    7.692e+02  <-- best
+               7.0    +0.03333     0.1645    2.192e+02    8.769e+02
+               8.0    +0.03113     0.1809    3.039e+02    1.216e+03
+               9.0    +0.02928     0.2060    4.455e+02    1.782e+03
+              10.0    +0.02748     0.2227    5.909e+02    2.364e+03
+              11.0    +0.02576     0.2400    7.808e+02    3.123e+03
+              12.0    +0.02415     0.2457    9.316e+02    3.726e+03
+              15.0    +0.01880     0.3065    2.393e+03    9.572e+03
+              18.0    +0.01282     0.3702    7.501e+03    3.000e+04
+              22.0    +0.00370     0.4685    1.446e+05    5.784e+05
+              26.0    -0.00606     0.5778    8.192e+04    3.277e+05
+              31.0    -0.01818     0.6959    1.318e+04    5.272e+04
+              37.0    -0.03078     0.9111    7.886e+03    3.155e+04
+              45.0    -0.00806     1.5220    3.210e+05    1.284e+06
+
+     1.5       6.0    +0.02298     0.1136    2.199e+02    8.797e+02  <-- best
+               7.0    +0.02173     0.1185    2.676e+02    1.071e+03
+               8.0    +0.02066     0.1329    3.722e+02    1.489e+03
+               9.0    +0.01981     0.1517    5.276e+02    2.111e+03
+              10.0    +0.01901     0.1634    6.652e+02    2.661e+03
+              11.0    +0.01824     0.1718    7.977e+02    3.191e+03
+              12.0    +0.01754     0.1911    1.069e+03    4.276e+03
+              15.0    +0.01505     0.2188    1.902e+03    7.608e+03
+              18.0    +0.01202     0.2432    3.686e+03    1.474e+04
+              22.0    +0.00693     0.3118    1.822e+04    7.290e+04
+              26.0    +0.00101     0.3872    1.323e+06    5.294e+06
+              31.0    -0.00704     0.4683    3.980e+04    1.592e+05
+              37.0    -0.01652     0.6495    1.392e+04    5.568e+04
+              45.0    -0.00569     1.0073    2.819e+05    1.128e+06
+              55.0    -0.00427     1.4077    9.777e+05    3.911e+06
+
+     2.0       6.0    +0.01535     0.0906    3.136e+02    1.254e+03  <-- best
+               7.0    +0.01472     0.0945    3.707e+02    1.483e+03
+               8.0    +0.01419     0.1023    4.678e+02    1.871e+03
+               9.0    +0.01380     0.1104    5.765e+02    2.306e+03
+              10.0    +0.01343     0.1186    7.020e+02    2.808e+03
+              11.0    +0.01308     0.1307    8.990e+02    3.596e+03
+              12.0    +0.01276     0.1391    1.070e+03    4.278e+03
+              15.0    +0.01154     0.1725    2.013e+03    8.051e+03
+              18.0    +0.00989     0.2148    4.245e+03    1.698e+04
+              22.0    +0.00688     0.2549    1.235e+04    4.941e+04
+              26.0    +0.00314     0.2939    7.886e+04    3.155e+05
+              31.0    -0.00228     0.3973    2.727e+05    1.091e+06
+              37.0    -0.00917     0.4669    2.332e+04    9.328e+04
+              45.0    -0.00424     0.6761    2.292e+05    9.167e+05
+              55.0    -0.00305     0.9628    8.991e+05    3.596e+06
+
+  BEST CONFIGURATION: r < 1.0 theta_500 (= 3.43'), u = 6.0 mJy/beam
+    Delta_xi = +0.03579   sigma_1 = 0.1654
+    N clusters for 3-sigma = 1.923e+02 (Poisson MC), 7.692e+02 (clustering-inflated)
+  wrote /sessions/happy-intelligent-dirac/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/ccat/ccat_lensed_mc.png
+----------------------------------------------------------------------------------
+CCAT — validity floor: u >= 3 sigma_c = 14.27 mJy/beam (Schechter)
+----------------------------------------------------------------------------------
+  sigma_c(Schechter) = 4.757, Sigma_tot = 5.678 mJy/beam.
+  Of the 15 ladder points, 8 lie above the floor.
+  xi-hat is unbiased only above ~3 sigma_c (v2 memo Sec. 10); below
+  it, the forecast's analytic numerator and peak-level MC denominator
+  are no longer the same distribution.  QUOTE THE FLOORED OPTIMUM.
+
+ r/th500   u_free   N_infl free  u_floor  N_infl floored   penalty
+    0.50      6.0     1.223e+03     31.0       2.063e+04    16.87x
+    1.00      6.0     7.692e+02     15.0       9.572e+03    12.44x
+    1.50      6.0     8.797e+02     15.0       7.608e+03     8.65x
+    2.00      6.0     1.254e+03     15.0       8.051e+03     6.42x
+
+  QUOTABLE HEADLINE (u >= 3 sigma_c): r < 1.5 theta_500 (= 5.14'), u = 15.0 mJy/beam
+    Delta_xi = +0.01505   sigma_1 = 0.2188
+    N clusters for 3-sigma = 1.902e+03 (Poisson MC), 7.608e+03 (clustering-inflated)
+  UNCONSTRAINED (grid minimum, NOT quotable): 7.692e+02 at r < 1.0 theta_500
+  wrote /sessions/happy-intelligent-dirac/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/ccat/ccat_forecast.png
+----------------------------------------------------------------------------------
+CCAT — translating the cluster requirement into a survey
+----------------------------------------------------------------------------------
+  The planned DSFG / CIB-Mid pilot covers 100 deg^2.  Cluster surface densities for
+  a benchmark-class halo (M_500 = 1e15, i.e. the very top of the mass function) are of
+  order 0.01-0.05 per deg^2 out to z ~ 1, so such a field contains only a few.  The
+  requirement below should therefore be read as 'how much sky, at what mass floor',
+  not as 'how many pointings'.
+
+  N required (clustering-inflated, u >= 3 sigma_c) = 7.608e+03 benchmark clusters at r < 1.5 theta_500.
+    at 0.05 such clusters per deg^2 (optimistic): 1.522e+05 deg^2 of sky
+    at 0.01 such clusters per deg^2 (conservative): 7.608e+05 deg^2 of sky
+    NOTE Delta_xi scales roughly as <ln mu>, and <ln mu> falls as M^(2/3)-ish, so a
+    sample of lower-mass clusters needs more of them than the surface-density scaling
+    alone suggests.  Use this as an order of magnitude.
+
+  Cross-experiment comparison is the point of the common benchmark:
+  run all three scripts and compare the 'BEST CONFIGURATION' lines.
+
+  wrote /sessions/happy-intelligent-dirac/mnt/GPD_Lensing_Cluster_Mass/Simulations/results/ccat.npz

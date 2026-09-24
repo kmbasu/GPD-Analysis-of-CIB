@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
+build/
+dist/
+.venv/
+
+# macOS / editors
+.DS_Store
+.spyproject/
+.vscode/
+.idea/
+
+# Survey data: never committed (see Planck_analysis/README.md, Herschel_analysis/README.md)
+*.fits
+*.fits.gz
+Planck_analysis/data_857/
+Herschel_analysis/data/
+
+# Stage caches written when re-running (large pickles)
+*.pkl
+Planck_analysis/results/v2_cache*/
+Herschel_analysis/results/v3_cache/
+Herschel_analysis/results/h2_cache/
+Simulations/tmp/
+
+# Figures written by re-runs (the paper figures are regenerated into paper/figures/)
+paper/figures/
+Simulations/figures/
+*/results/*.png
+num_count_fits/num_count_fit_results.png
+
+# Test scratch space
+tests/_smoke/
+
+# NOTE: the shipped result files (*/results/*.npz, *.json, *.log) ARE part of
+# the release and must not be ignored.

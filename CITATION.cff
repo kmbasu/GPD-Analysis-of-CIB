@@ -1,0 +1,62 @@
+# This file tells GitHub (the "Cite this repository" button) and Zenodo how to
+# cite this code.  Before each GitHub release, check `version` and
+# `date-released`; after Zenodo has minted the DOI, add it under
+# `identifiers` (see the commented template below).
+cff-version: 1.2.0
+message: >-
+  If you use this code, please cite the paper below (preferred citation) and,
+  for the exact code version, the archived software release.
+title: "Code for 'Probing submillimeter number counts below the confusion limit: extreme-value statistics of the P(D) distribution and its modulation by gravitational lensing'"
+type: software
+version: 1.0.0
+date-released: 2026-09-24
+license: MIT
+authors:
+  - family-names: Basu
+    given-names: Kaustuv
+    affiliation: "Argelander Institute for Astronomy, University of Bonn"
+    orcid: "https://orcid.org/0000-0001-5276-8730"
+  - family-names: Guerrero
+    given-names: Andrea
+    affiliation: "Argelander Institute for Astronomy, University of Bonn"
+    orcid: "https://orcid.org/0000-0002-5545-9527"
+  - family-names: Bertoldi
+    given-names: Frank
+    affiliation: "Argelander Institute for Astronomy, University of Bonn"
+    orcid: "https://orcid.org/0000-0002-1707-1775"
+repository-code: "https://github.com/kmbasu/GPD-Analysis-of-CIB"
+keywords:
+  - cosmic infrared background
+  - P(D) analysis
+  - confusion noise
+  - extreme-value statistics
+  - generalized Pareto distribution
+  - gravitational lensing
+  - submillimeter number counts
+  - Planck
+  - Herschel SPIRE
+  - CCAT
+# identifiers:
+#   - type: doi
+#     value: "10.5281/zenodo.XXXXXXX"
+#     description: "Concept DOI of the archived releases (Zenodo)"
+preferred-citation:
+  type: article
+  title: "Probing submillimeter number counts below the confusion limit: extreme-value statistics of the P(D) distribution and its modulation by gravitational lensing"
+  authors:
+    - family-names: Basu
+      given-names: Kaustuv
+      orcid: "https://orcid.org/0000-0001-5276-8730"
+    - family-names: Guerrero
+      given-names: Andrea
+      orcid: "https://orcid.org/0000-0002-5545-9527"
+    - family-names: Bertoldi
+      given-names: Frank
+      orcid: "https://orcid.org/0000-0002-1707-1775"
+  year: 2026
+  identifiers:
+    - type: other
+      value: "arXiv:2609.19689"
+    - type: doi
+      value: "10.48550/arXiv.2609.19689"
+  url: "https://arxiv.org/abs/2609.19689"

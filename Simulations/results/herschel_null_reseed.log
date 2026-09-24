@@ -1,0 +1,128 @@
+==================================================================================
+HERSCHEL NULL SEED ENSEMBLE — 8 seeds: 5000, 5001, 5002, 5003, 5004, 5005, 5006, 5007
+==================================================================================
+  Seed 5000 is stage_lensed_mc's default and reproduces the production
+  run of `simulate_herschel.py` (results/herschel.log) exactly.
+  Independent unlensed reference (simulate_herschel.py Sec. 4, 80 x 256^2):
+    u   =    25.0     30.0     35.0     40.0     45.0     50.0     55.0     65.0     75.0
+    xi  =  0.0447   0.0313   0.0142  -0.0331  -0.0668  -0.1077  -0.1255  -0.1227  -0.1224
+
+----------------------------------------------------------------------------------
+4a. MAX |pull| OF THE NULL ARM PER SEED AND APERTURE
+    pull = D_xi(null-ctrl) / sigma; the PASS/FAIL criterion is max < 3
+----------------------------------------------------------------------------------
+   seed     r<0.5     r<1.0     r<1.5     r<2.0      max   verdict
+   5000      2.75      1.71      2.64      3.18     3.18  **FAIL**
+   5001      3.33      2.52      1.93      1.64     3.33  **FAIL**
+   5002      1.11      1.13      1.10      1.68     1.68      PASS
+   5003      1.17      1.63      2.91      1.33     2.91      PASS
+   5004      0.70      1.40      1.83      1.84     1.84      PASS
+   5005      1.83      2.21      2.52      1.62     2.52      PASS
+   5006      0.75      1.88      1.72      1.98     1.98      PASS
+   5007      0.86      1.97      2.95      1.92     2.95      PASS
+
+  Over 8 seeds: max-pull mean 2.55, median 2.71, range [1.68, 3.33]
+  Seeds failing the max<3 criterion: 2 of 8
+  NOTE the criterion is applied to the MAXIMUM over 9 thresholds x 4
+  correlated apertures, so a max-pull of ~2.5-3 is the EXPECTED value of
+  a well-behaved null, not a warning sign.  The quantity to report is
+  this distribution, not a single draw's pass/fail.
+
+----------------------------------------------------------------------------------
+4b. WHICH ARM MOVES — xi per arm at u = 25 mJy/beam (lowest threshold),
+    against the independent unlensed reference
+----------------------------------------------------------------------------------
+   seed  aperture   xi_ctrl   xi_null   xi_lens  ctrl-null
+   5000     r<0.5   -0.0590    0.0496   -0.0059    -0.1086
+   5000     r<1.0   -0.0025    0.0428    0.0508    -0.0454
+   5000     r<1.5    0.0022    0.0548    0.0495    -0.0526
+   5000     r<2.0    0.0002    0.0458    0.0457    -0.0456
+   5001     r<0.5    0.0187    0.0085    0.0252     0.0102
+   5001     r<1.0    0.0238    0.0186    0.0471     0.0051
+   5001     r<1.5    0.0309    0.0083    0.0522     0.0226
+   5001     r<2.0    0.0285    0.0313    0.0467    -0.0028
+   5002     r<0.5    0.0496    0.0756   -0.0356    -0.0260
+   5002     r<1.0    0.0539    0.0351    0.0301     0.0188
+   5002     r<1.5    0.0466    0.0377    0.0329     0.0089
+   5002     r<2.0    0.0475    0.0356    0.0328     0.0119
+   5003     r<0.5    0.0006   -0.0433    0.0253     0.0439
+   5003     r<1.0    0.0026   -0.0018    0.0313     0.0044
+   5003     r<1.5    0.0141    0.0317    0.0508    -0.0176
+   5003     r<2.0    0.0120    0.0178    0.0467    -0.0058
+   5004     r<0.5    0.0418    0.0843   -0.0023    -0.0425
+   5004     r<1.0    0.0689    0.0267    0.0163     0.0422
+   5004     r<1.5    0.0513    0.0543    0.0401    -0.0030
+   5004     r<2.0    0.0512    0.0476    0.0382     0.0036
+   5005     r<0.5    0.0595   -0.0369   -0.0043     0.0963
+   5005     r<1.0    0.0603    0.0006    0.0434     0.0597
+   5005     r<1.5    0.0500    0.0279    0.0458     0.0221
+   5005     r<2.0    0.0518    0.0290    0.0594     0.0228
+   5006     r<0.5    0.0504    0.0207    0.0423     0.0297
+   5006     r<1.0    0.0626    0.0446    0.0707     0.0180
+   5006     r<1.5    0.0263    0.0299    0.0663    -0.0035
+   5006     r<2.0    0.0231    0.0339    0.0624    -0.0107
+   5007     r<0.5   -0.0103   -0.0091   -0.0434    -0.0013
+   5007     r<1.0    0.0428   -0.0211    0.0056     0.0640
+   5007     r<1.5    0.0442    0.0081    0.0232     0.0361
+   5007     r<2.0    0.0340    0.0156    0.0261     0.0183
+
+  Independent unlensed reference at u = 25: xi = +0.0447
+  r<0.5: mean(xi_ctrl - xi_null) = +0.0002 +- 0.0217 (sd 0.0615 over 8 seeds)
+  r<1.0: mean(xi_ctrl - xi_null) = +0.0209 +- 0.0125 (sd 0.0353 over 8 seeds)
+  r<1.5: mean(xi_ctrl - xi_null) = +0.0016 +- 0.0099 (sd 0.0279 over 8 seeds)
+  r<2.0: mean(xi_ctrl - xi_null) = -0.0010 +- 0.0076 (sd 0.0215 over 8 seeds)
+  If the production excursion were STRUCTURAL, this mean would be
+  displaced from zero by ~-0.046 at every aperture.  If it was a draw,
+  the mean is consistent with zero and the scatter sets the null floor.
+
+----------------------------------------------------------------------------------
+4c. THE LENSED D_xi ACROSS SEEDS at u = 25 (the number the memo quotes
+    as +0.046 for the Herschel arm)
+----------------------------------------------------------------------------------
+ aperture   mean D_xi  sd over seeds  mean sigma_boot
+    r<0.5    -0.01873        0.04641          0.05208
+    r<1.0    -0.00214        0.03635          0.02733
+    r<1.5    +0.01190        0.02745          0.01949
+    r<2.0    +0.01371        0.02436          0.01455
+  The analytic prediction at these apertures/thresholds is of order
+  1e-3 (see simulate_herschel.py Sec. 6), so any mean far above that is
+  pipeline floor, not signal.
+
+----------------------------------------------------------------------------------
+4d. BOOTSTRAP COVERAGE — seed-to-seed scatter of the NULL against the
+    paired-bootstrap sigma.  The null's true value is exactly 0, so the
+    scatter over independent seeds IS the true error.
+----------------------------------------------------------------------------------
+ aperture       u   sd_seeds  mean sigma_bs   ratio
+    r<0.5      25    0.06149        0.06029    1.02
+    r<0.5      30    0.09707        0.07665    1.27
+    r<0.5      35    0.09136        0.09391    0.97
+    r<0.5      40    0.13309        0.11826    1.13
+    r<0.5     ALL                              1.13   <- median over thresholds
+    r<1.0      25    0.03533        0.02880    1.23
+    r<1.0      30    0.04461        0.03772    1.18
+    r<1.0      35    0.04266        0.04620    0.92
+    r<1.0      40    0.05527        0.06009    0.92
+    r<1.0     ALL                              1.07   <- median over thresholds
+    r<1.5      25    0.02793        0.02035    1.37
+    r<1.5      30    0.01781        0.02528    0.70
+    r<1.5      35    0.01720        0.03168    0.54
+    r<1.5      40    0.04034        0.03957    1.02
+    r<1.5     ALL                              1.39   <- median over thresholds
+    r<2.0      25    0.02151        0.01532    1.40
+    r<2.0      30    0.01784        0.01918    0.93
+    r<2.0      35    0.01514        0.02376    0.64
+    r<2.0      40    0.02922        0.03095    0.94
+    r<2.0     ALL                              1.13   <- median over thresholds
+
+  Median coverage ratio over all apertures and thresholds: 1.13
+  With 8 seeds each sd carries ~27% uncertainty, so this is CONSISTENT WITH UNITY.
+  Read conservatively: the paired bootstrap is approximately correct, and
+  the null's error bar is NOT the explanation for the 3.18.  The
+  resolution of must-close item 2 rests on Sec. 4a-4b instead — the null
+  is unbiased, the failing aperture moves between seeds, and 2 of 8 draws
+  exceeding a max-over-36-correlated-tests criterion is unremarkable.
+  A ratio meaningfully above 1 would need ~50 seeds to establish; that is
+  not needed for this item and is not claimed.
+
+  wrote /sessions/happy-intelligent-dirac/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/herschel/herschel_null_seed_ensemble.png

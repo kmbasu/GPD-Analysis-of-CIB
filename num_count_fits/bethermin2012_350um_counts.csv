@@ -1,0 +1,24 @@
+# Bethermin et al. (2012), A&A 542, A58, Table 3: 350 micron differential number
+# counts, "All" (all-redshift) column, as used in Appendix A of Basu, Guerrero &
+# Bertoldi (2026, arXiv:2609.19689).
+#   S_mJy      bin-center flux density [mJy]
+#   Y          normalized counts S^2.5 dN/dS [Jy^1.5 sr^-1] (S in Jy)
+#   sigma_Y    quoted 1-sigma uncertainty of Y [Jy^1.5 sr^-1] (marginal; no covariance published)
+#   method     stack_GOODSN / stack_COSMOS = stacking, resolved_COSMOS = resolved sources
+#   used_in_fit  1 if the point enters the fits of Table A.1 (6 <= S < 100 mJy, GOODS-N excluded)
+# The same table is embedded in num_count_fitting.py (BETHERMIN2012_350UM);
+# tests/test_release.py checks that the two agree.
+S_mJy,Y,sigma_Y,method,used_in_fit
+2.1,4709,1342,stack_GOODSN,0
+3.0,6949,1167,stack_GOODSN,0
+4.2,9964,1396,stack_GOODSN,0
+6.0,21510,3858,stack_COSMOS,1
+8.4,23820,3174,stack_COSMOS,1
+11.9,24402,2274,stack_COSMOS,1
+16.8,24229,3158,stack_COSMOS,1
+23.8,18652,1605,resolved_COSMOS,1
+33.6,15285,1448,resolved_COSMOS,1
+47.4,9092,1187,resolved_COSMOS,1
+67.0,3487,828,resolved_COSMOS,1
+94.6,1163,630,resolved_COSMOS,1
+133.7,170,273,resolved_COSMOS,0

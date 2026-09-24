@@ -1,0 +1,288 @@
+{
+  "data_reference": "Bethermin et al. (2012), A&A 542, A58, Table 3, 350um 'All' column",
+  "fit_flux_max_mJy": 100.0,
+  "n_fit_points": 9,
+  "schechter": {
+    "form": "dN/dS = (nstar/sstar) * (S/sstar)^alpha * exp(-S/sstar)",
+    "alpha": -1.8896771723921697,
+    "alpha_err": 0.1858425029103909,
+    "nstar_deg2": 7013.971101909618,
+    "nstar_err": 2155.9689118503416,
+    "sstar_mJy": 19.01179957743825,
+    "sstar_err": 2.755882689441209,
+    "chi2": 1.1635826604453212,
+    "dof": 6,
+    "redchi2": 0.19393044340755353,
+    "guerrero_memo_values": {
+      "alpha": -1.3,
+      "nstar_deg2": 8902.0,
+      "sstar_mJy": 14.5
+    }
+  },
+  "spl": {
+    "form": "dN/dS = N0 * (S/S0)^beta ; S0 fixed",
+    "S0_mJy": 2.2,
+    "N0": 105305.00693815576,
+    "N0_err": 12012.384895870879,
+    "beta": -3.278939371109816,
+    "beta_err": 0.049047271015649256,
+    "chi2": 88.02566576604607,
+    "dof": 7,
+    "redchi2": 12.575095109435154,
+    "patanchon2009_values": {
+      "beta": -3.119,
+      "beta_err": 0.024,
+      "S0_mJy": 2.2,
+      "log10_N0_deg2_Jy": 7.383,
+      "log10_N0_err": 0.012
+    }
+  },
+  "dpl": {
+    "form": "dN/dS = (phistar/sstar) * [(S/sstar)^alpha + (S/sstar)^beta]^-1",
+    "prior": {
+      "log10_sstar_mean": 0.7,
+      "log10_sstar_sigma": 0.1,
+      "sstar_hard_bounds_mJy": [
+        0.29999999999999993,
+        29.999999999999996
+      ]
+    },
+    "alpha": 1.0815396709630054,
+    "alpha_err": 0.5065150708953372,
+    "beta": 3.9279212310741896,
+    "beta_err": 0.14941598704217895,
+    "sstar_mJy": 11.703690776354527,
+    "sstar_err": 1.8851287249192132,
+    "phistar_deg2": 13315.943621569337,
+    "phistar_err": 3682.9122855551786,
+    "chi2": 19.62465346010505,
+    "dof_nominal": 5,
+    "redchi2_nominal": 3.92493069202101,
+    "dof_caveat": "S* is prior-regularized; effective dof is somewhat higher than the nominal N-4 used here.",
+    "optimizer_success": true
+  },
+  "confusion_noise": {
+    "formula": "sigma_c^2 = (Omega_beam/2) * int_Smin^Smax S^2 (dN/dS) dS (Poisson/unclustered; confusion_noise_reference.md Sec.4.1)",
+    "Smin_mJy": 6.0,
+    "Smax_mJy": 100.0,
+    "by_beam_fwhm_arcsec": {
+      "10.0": {
+        "Schechter": {
+          "mean_mJy_per_beam": 0.9733193886927319,
+          "sigma_conf_mJy_per_beam": 2.8405960074671563,
+          "sources_per_beam": 0.08263782033801524
+        },
+        "SPL": {
+          "mean_mJy_per_beam": 0.9392464676088267,
+          "sigma_conf_mJy_per_beam": 2.6875550174229255,
+          "sources_per_beam": 0.09017487958850033
+        },
+        "DPL": {
+          "mean_mJy_per_beam": 0.9843400157788248,
+          "sigma_conf_mJy_per_beam": 2.8352063014208175,
+          "sources_per_beam": 0.08413436387784426
+        }
+      },
+      "15.0": {
+        "Schechter": {
+          "mean_mJy_per_beam": 2.1899686245586465,
+          "sigma_conf_mJy_per_beam": 4.260894011200734,
+          "sources_per_beam": 0.18593509576053427
+        },
+        "SPL": {
+          "mean_mJy_per_beam": 2.11330455211986,
+          "sigma_conf_mJy_per_beam": 4.031332526134388,
+          "sources_per_beam": 0.20289347907412575
+        },
+        "DPL": {
+          "mean_mJy_per_beam": 2.2147650355023556,
+          "sigma_conf_mJy_per_beam": 4.252809452131226,
+          "sources_per_beam": 0.18930231872514958
+        }
+      },
+      "20.0": {
+        "Schechter": {
+          "mean_mJy_per_beam": 3.8932775547709277,
+          "sigma_conf_mJy_per_beam": 5.681192014934313,
+          "sources_per_beam": 0.33055128135206097
+        },
+        "SPL": {
+          "mean_mJy_per_beam": 3.7569858704353067,
+          "sigma_conf_mJy_per_beam": 5.375110034845851,
+          "sources_per_beam": 0.3606995183540013
+        },
+        "DPL": {
+          "mean_mJy_per_beam": 3.937360063115299,
+          "sigma_conf_mJy_per_beam": 5.670412602841635,
+          "sources_per_beam": 0.33653745551137704
+        }
+      },
+      "25.0": {
+        "Schechter": {
+          "mean_mJy_per_beam": 6.083246179329574,
+          "sigma_conf_mJy_per_beam": 7.10149001866789,
+          "sources_per_beam": 0.5164863771125953
+        },
+        "SPL": {
+          "mean_mJy_per_beam": 5.870290422555167,
+          "sigma_conf_mJy_per_beam": 6.718887543557314,
+          "sources_per_beam": 0.5635929974281271
+        },
+        "DPL": {
+          "mean_mJy_per_beam": 6.152125098617654,
+          "sigma_conf_mJy_per_beam": 7.088015753552044,
+          "sources_per_beam": 0.5258397742365266
+        }
+      },
+      "30.0": {
+        "Schechter": {
+          "mean_mJy_per_beam": 8.759874498234586,
+          "sigma_conf_mJy_per_beam": 8.521788022401468,
+          "sources_per_beam": 0.7437403830421371
+        },
+        "SPL": {
+          "mean_mJy_per_beam": 8.45321820847944,
+          "sigma_conf_mJy_per_beam": 8.062665052268777,
+          "sources_per_beam": 0.811573916296503
+        },
+        "DPL": {
+          "mean_mJy_per_beam": 8.859060142009422,
+          "sigma_conf_mJy_per_beam": 8.505618904262452,
+          "sources_per_beam": 0.7572092749005983
+        }
+      }
+    },
+    "spl_Smin_sensitivity_mJy_beam": {
+      "Smin_scan_mJy": [
+        6.0,
+        2.0,
+        0.5,
+        0.1
+      ],
+      "sigma_c": {
+        "Schechter": [
+          7.10149001866789,
+          7.76710795056596,
+          8.005639590459753,
+          8.061640359638421
+        ],
+        "SPL": [
+          6.718887543557314,
+          8.655224897461876,
+          11.32079798240736,
+          14.907831952502594
+        ],
+        "DPL": [
+          7.088015753552044,
+          7.495241053661765,
+          7.549247108160617,
+          7.553121279091744
+        ]
+      }
+    },
+    "spl_q2_closed_form_vs_numeric": {
+      "closed_form": 1652286.302715159,
+      "numeric": 1652286.3077720338
+    },
+    "eta_xi_vs_flux": [
+      {
+        "S_mJy": 2.0,
+        "eta_DPL": 1.1000515774752233,
+        "xi_DPL": 9.994844911342245,
+        "eta_Schechter": 1.994874964172988,
+        "xi_Schechter": 1.0051514371268477
+      },
+      {
+        "S_mJy": 4.0,
+        "eta_DPL": 1.209522330399719,
+        "xi_DPL": 4.77276096582277,
+        "eta_Schechter": 2.100072755954079,
+        "xi_Schechter": 0.909030784180009
+      },
+      {
+        "S_mJy": 6.0,
+        "eta_DPL": 1.451300025636575,
+        "xi_DPL": 2.2158208357942457,
+        "eta_Schechter": 2.2052705477355032,
+        "xi_Schechter": 0.8296892360630803
+      },
+      {
+        "S_mJy": 8.0,
+        "eta_DPL": 1.8015305435999807,
+        "xi_DPL": 1.2476130922080861,
+        "eta_Schechter": 2.3104683395169276,
+        "xi_Schechter": 0.7630859669365425
+      },
+      {
+        "S_mJy": 10.0,
+        "eta_DPL": 2.1913039802095824,
+        "xi_DPL": 0.8394163174239316,
+        "eta_Schechter": 2.415666131297908,
+        "xi_Schechter": 0.706381241940981
+      },
+      {
+        "S_mJy": 11.703690776354527,
+        "eta_DPL": 2.5047294382824834,
+        "xi_DPL": 0.6645713006993551,
+        "eta_Schechter": 2.5052783850731566,
+        "xi_Schechter": 0.6643289440121735
+      },
+      {
+        "S_mJy": 14.0,
+        "eta_DPL": 2.85993478175072,
+        "xi_DPL": 0.5376532606475156,
+        "eta_Schechter": 2.6260617148603127,
+        "xi_Schechter": 0.6149828083775438
+      },
+      {
+        "S_mJy": 18.0,
+        "eta_DPL": 3.281764449594061,
+        "xi_DPL": 0.4382573320300024,
+        "eta_Schechter": 2.8364572984231615,
+        "xi_Schechter": 0.5445266823566388
+      },
+      {
+        "S_mJy": 24.0,
+        "eta_DPL": 3.6015911667911573,
+        "xi_DPL": 0.38438014887381994,
+        "eta_Schechter": 3.1520506737669907,
+        "xi_Schechter": 0.46467307307851674
+      },
+      {
+        "S_mJy": 33.0,
+        "eta_DPL": 3.786428255907913,
+        "xi_DPL": 0.35888237850005794,
+        "eta_Schechter": 3.625440736781846,
+        "xi_Schechter": 0.38088842988920696
+      },
+      {
+        "S_mJy": 47.0,
+        "eta_DPL": 3.874526791263861,
+        "xi_DPL": 0.3478833465873956,
+        "eta_Schechter": 4.3618252792499295,
+        "xi_Schechter": 0.29745745746284413
+      },
+      {
+        "S_mJy": 67.0,
+        "eta_DPL": 3.908223004102152,
+        "xi_DPL": 0.3438525857850187,
+        "eta_Schechter": 5.4138031970633405,
+        "xi_Schechter": 0.2265619818902065
+      },
+      {
+        "S_mJy": 95.0,
+        "eta_DPL": 3.9205984842639947,
+        "xi_DPL": 0.34239557590265784,
+        "eta_Schechter": 6.886572281997368,
+        "xi_Schechter": 0.1698781484529212
+      }
+    ],
+    "dpl_break_threshold_units_k": {
+      "10.0": 4.1279855968468375,
+      "15.0": 2.7519903978978917,
+      "20.0": 2.0639927984234188,
+      "25.0": 1.6511942387387348,
+      "30.0": 1.3759951989489458
+    }
+  }
+}

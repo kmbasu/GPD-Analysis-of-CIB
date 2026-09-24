@@ -1,0 +1,221 @@
+==================================================================================
+simulate_planck.py — 857 GHz, GPD tail statistics of the CIB
+==================================================================================
+BEAM DILUTION ARM.  A 5' beam Gaussianizes the confusion P(D); a null
+here is a measurement of that, not a failure of the method.
+==================================================================================
+Planck — noise budget at S_min = 1.0 mJy (audit R1), S_cut = 100 mJy
+==================================================================================
+  <Planck: 300.00" beam, 60.0" pix, sigma_N=30.400, sigma_nonP=159.2, S_cut=100 mJy>
+  provenance: Revised_Planck_analysis.md: Lenz+2019 857 GHz, mask 4.0e+20_gp40; beam 5' SMICA-homogenised; pixel 60"; sigma_N 30.4 mJy/beam from (odd-even)/2; sigma_nonP 159.2 mJy/beam so the core reproduces the measured 185.4; S_cut 100 mJy per the data memo Sec. 5
+
+     model   sigma_c   sigma_N  sigma_nonP  Sigma_tot    N_beam    skew  s_split  f_N impl
+ Schechter     95.15     30.40       159.2     187.94     680.1    0.15     2.92     0.320
+       SPL    119.38     30.40       159.2     201.30    4823.8    0.08     4.04     0.255
+       DPL     90.46     30.40       159.2     185.61     283.7    0.17     1.96     0.336
+
+  measured core width = 185.40 mJy/beam;  simulated (Schechter) = 187.94  -> ratio 1.014
+  counts fitted over S = 6.0-94.6 mJy; NO renormalisation applied anywhere (audit R4).
+
+  The non-Poisson budget, checked against the data (Sec. 7.1):
+         model   sigma_c  measured nonP   injected  Sigma_tot  vs 185.4
+     Schechter     95.15          159.2      159.2     187.94     1.014
+           SPL    119.38          141.9      159.2     201.30     1.086
+           DPL     90.46          161.9      159.2     185.61     1.001
+    The single injected value 159.2 is the Schechter's measured residual; the SPL and
+    DPL therefore land a few percent off 185.4, which is the honest consequence of
+    treating the foreground as a model-independent property of the sky.
+
+  Beam-dilution number: S_cut / sigma_c = 1.05 here, against 12.6 at SPIRE 25" (data memo Sec. 6).
+  Sources per beam above 1.0 mJy: Schechter 680, SPL 4824, DPL 284  -> the CLT has done its work.
+----------------------------------------------------------------------------------
+Planck — benchmark lens apertures
+----------------------------------------------------------------------------------
+NFW benchmark: M_500 = 1.000e+15 Msun at z_l = 0.5, z_s = 2.0
+  -> R_500 = 1.293 Mpc, theta_500 = 3.425', M_vir = 1.7945e+15 Msun, c_vir = 3.503
+  beam = 300.00" = 5.000', theta_500 = 3.425'  -> theta_500 / FWHM = 0.69
+
+ r/theta500  r [arcmin]     <mu>   <ln mu>     beams  peaks/cl
+       1.00       3.425   1.6572    0.2994       1.3       0.3
+       1.50       5.138   1.3283    0.1680       2.9       0.7
+       2.00       6.850   1.1917    0.1016       5.2       1.3
+       3.00      10.275   1.0857    0.0456      11.7       2.9
+
+  peaks/cluster = pi r^2 / (4 Omega_beam): declustered maxima occur at ~1 per 4 beam solid angles, not 1 per beam.
+
+  theta_500 = 3.43' against a 5.00' beam: the benchmark cluster is SMALLER
+  than one beam, so no aperture below ~1.5 theta_500 contains even one independent peak.
+==================================================================================
+Planck — UNLENSED xi(u):  60 maps of 256^2 at 60.0" = 1092.27 deg^2 total
+==================================================================================
+  thresholds [mJy/beam]: 270.6, 363.3, 456.0, 548.7, 641.4, 734.1, 826.8, 919.5, 1012.2
+   Schechter    36621 peaks (0.264/beam)  MC rms  188.44 vs analytic Sigma_tot  187.94  ratio 1.003   [7s]
+              n_exc = 16527, 8794, 3597, 1130, 255, 48, 6, 0, 0
+         SPL    36752 peaks (0.265/beam)  MC rms  201.80 vs analytic Sigma_tot  201.30  ratio 1.002   [8s]
+              n_exc = 18101, 10430, 4874, 1922, 591, 143, 25, 3, 0
+         DPL    36746 peaks (0.265/beam)  MC rms  185.69 vs analytic Sigma_tot  185.61  ratio 1.000   [7s]
+              n_exc = 16211, 8325, 3352, 1060, 249, 37, 3, 0, 0
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/planck/planck_unlensed_xi.png
+
+  Measured xi-hat(u) for comparison (data memo Sec. 7.2):
+    k=1.0 u=177.9  -0.0916 +- 0.0066     k=3.0 u=548.8  +0.0747 +- 0.0270
+    k=2.0 u=363.3  +0.0168 +- 0.0126     k=3.5 u=641.5  +0.0929 +- 0.0371
+    k=2.5 u=456.0  +0.0549 +- 0.0194     k=4.0 u=734.2  +0.0829 +- 0.0469
+  Science window k in (3.0, 4.5); below k~3 the measurement is floor-dominated.
+  Measured declustered peak density 0.233/beam; simulated: Schechter 0.264, SPL 0.265, DPL 0.265
+----------------------------------------------------------------------------------
+Planck — bright-extended leg: Schechter counts to 1500 mJy
+----------------------------------------------------------------------------------
+  At Herschel the bright-source audit is done by masking the map above
+  S_cut and comparing with identically truncated models.  At Planck that is
+  impossible: S_cut = 100 mJy is 0.54 sigma_core, so masking there would remove
+  most of the sky.  The bracket must run the other way — extend the model.
+  CAVEAT (data memo Sec. 7.5): this extrapolates the fitted Schechter far above its
+  fitted range, and the real bright counts are lensing-dominated and shallower, so
+  it UNDER-states the bright population's contribution.  Read it as a lower bound.
+==================================================================================
+Planck [bright] — UNLENSED xi(u):  60 maps of 256^2 at 60.0" = 1092.27 deg^2 total
+==================================================================================
+  thresholds [mJy/beam]: 270.6, 363.3, 456.0, 548.7, 641.4, 734.1, 826.8, 919.5, 1012.2
+   Schechter    36547 peaks (0.263/beam)  MC rms  188.66 vs analytic Sigma_tot  188.11  ratio 1.003   [9s]
+              n_exc = 16432, 8627, 3605, 1200, 289, 45, 7, 0, 0
+         SPL    36440 peaks (0.262/beam)  MC rms  208.87 vs analytic Sigma_tot  208.36  ratio 1.002   [10s]
+              n_exc = 18647, 11328, 5849, 2672, 1139, 486, 239, 135, 88
+         DPL    36498 peaks (0.263/beam)  MC rms  188.35 vs analytic Sigma_tot  188.21  ratio 1.001   [8s]
+              n_exc = 16384, 8769, 3715, 1275, 399, 128, 53, 29, 18
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/planck/planck_unlensed_xi_bright.png
+
+     model  xi truncated  xi extended     shift   (at each threshold)
+ Schechter -0.231/-0.222  -0.187/-0.190  -0.147/-0.164  -0.099/-0.131  -0.111/-0.069  +nan/+nan  +nan/+nan  +nan/+nan  +nan/+nan
+       SPL -0.240/-0.089  -0.196/-0.024  -0.165/+0.051  -0.145/+0.149  -0.138/+0.239  -0.161/+0.229  +nan/+0.010  +nan/-0.242  +nan/-0.367
+       DPL -0.217/-0.099  -0.188/-0.049  -0.162/+0.034  -0.157/+0.139  -0.129/+0.313  +nan/+0.277  +nan/+nan  +nan/+nan  +nan/+nan
+  Extending the counts moves the simulated xi UPWARD; the data memo measures that
+  shift to be roughly half the data-minus-null offset at k = 3.5.
+----------------------------------------------------------------------------------
+Planck — analytic $\Delta\xi(u)$ of the benchmark lens
+----------------------------------------------------------------------------------
+ r/th500      model    <mu>     270.6     363.3     456.0     548.7     641.4     734.1     826.8     919.5    1012.2
+    1.00  Schechter   1.657  -0.00660  -0.00928  -0.01501  -0.02831  -0.05480  -0.03206       nan       nan       nan
+    1.00        SPL   1.657  -0.05933  -0.07941  -0.11835  -0.19528  -0.28712  -0.11618       nan       nan       nan
+    1.00        DPL   1.657  -0.00478  -0.00677  -0.01108  -0.02128  -0.04221  -0.02576       nan       nan       nan
+  [cache] thc_Planck_Schechter_166d872072.pkl
+    1.50  Schechter   1.328  -0.00345  -0.00485  -0.00789  -0.01514  -0.03011  -0.01788       nan       nan       nan
+  [cache] thc_Planck_SPL_166d872072.pkl
+    1.50        SPL   1.328  -0.02331  -0.03092  -0.04653  -0.08087  -0.13976  -0.06678       nan       nan       nan
+  [cache] thc_Planck_DPL_166d872072.pkl
+    1.50        DPL   1.328  -0.00258  -0.00363  -0.00595  -0.01157  -0.02350  -0.01467       nan       nan       nan
+  [cache] thc_Planck_Schechter_166d872072.pkl
+    2.00  Schechter   1.192  -0.00204  -0.00287  -0.00468  -0.00905  -0.01825  -0.01094       nan       nan       nan
+  [cache] thc_Planck_SPL_166d872072.pkl
+    2.00        SPL   1.192  -0.01284  -0.01692  -0.02547  -0.04496  -0.08196  -0.04279       nan       nan       nan
+  [cache] thc_Planck_DPL_166d872072.pkl
+    2.00        DPL   1.192  -0.00153  -0.00216  -0.00354  -0.00692  -0.01422  -0.00894       nan       nan       nan
+  [cache] thc_Planck_Schechter_166d872072.pkl
+    3.00  Schechter   1.086  -0.00090  -0.00127  -0.00207  -0.00404  -0.00825  -0.00496       nan       nan       nan
+  [cache] thc_Planck_SPL_166d872072.pkl
+    3.00        SPL   1.086  -0.00626  -0.00821  -0.01234  -0.02200  -0.04153  -0.02326       nan       nan       nan
+  [cache] thc_Planck_DPL_166d872072.pkl
+    3.00        DPL   1.086  -0.00068  -0.00095  -0.00157  -0.00309  -0.00641  -0.00403       nan       nan       nan
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/planck/planck_lensed_theory.png
+==================================================================================
+Planck — LENSED Monte Carlo: 3000 copies of the benchmark, 64^2 cutouts at 60.0" (64.0' across), model = Schechter
+==================================================================================
+  9000 cutouts built [24s]
+
+ r/th500  pk/cl lens  pk/cl ctrl  yield est
+    1.00        0.55        0.27       0.33
+    1.50        0.89        0.70       0.73
+    2.00        1.38        1.29       1.30
+    3.00        2.89        2.95       2.93
+
+  aperture r < 1.0 theta_500 = 3.425'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+        270.6    1188   -0.2337   -0.3259   -0.09227  0.07195   -0.13329  0.07626
+        363.3     848   -0.1845   -0.2677   -0.08325  0.09854   -0.14398  0.10766
+        456.0     514   -0.1351   -0.1989   -0.06380  0.14390   -0.32927  0.19641
+        548.7     248        --        --           (below N_exc floor)
+        641.4      89        --        --           (below N_exc floor)
+        734.1      25        --        --           (below N_exc floor)
+        826.8      10        --        --           (below N_exc floor)
+        919.5       2        --        --           (below N_exc floor)
+       1012.2       0        --        --           (below N_exc floor)
+    NULL check |Dxi|/sigma: max 1.75  PASS
+
+  aperture r < 1.5 theta_500 = 5.138'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+        270.6    1807   -0.2530   -0.3016   -0.04862  0.03998   +0.03397  0.08750
+        363.3    1243   -0.2136   -0.2423   -0.02870  0.05195   +0.04466  0.09882
+        456.0     696   -0.2020   -0.1968   +0.00514  0.07629   +0.07999  0.15539
+        548.7     324        --        --           (below N_exc floor)
+        641.4     113        --        --           (below N_exc floor)
+        734.1      29        --        --           (below N_exc floor)
+        826.8      11        --        --           (below N_exc floor)
+        919.5       2        --        --           (below N_exc floor)
+       1012.2       0        --        --           (below N_exc floor)
+    NULL check |Dxi|/sigma: max 0.51  PASS
+
+  aperture r < 2.0 theta_500 = 6.850'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+        270.6    2568   -0.2519   -0.2828   -0.03096  0.02651   +0.02940  0.06675
+        363.3    1688   -0.2044   -0.2318   -0.02739  0.03177   +0.02892  0.06691
+        456.0     915   -0.1971   -0.1839   +0.01325  0.04973   +0.06333  0.10162
+        548.7     398   -0.1789   -0.1502   +0.02869  0.09714   +0.13759  0.19226
+        641.4     138        --        --           (below N_exc floor)
+        734.1      32        --        --           (below N_exc floor)
+        826.8      11        --        --           (below N_exc floor)
+        919.5       2        --        --           (below N_exc floor)
+       1012.2       0        --        --           (below N_exc floor)
+    NULL check |Dxi|/sigma: max 0.72  PASS
+
+  aperture r < 3.0 theta_500 = 10.275'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+        270.6    4674   -0.2316   -0.2465   -0.01492  0.01894   +0.00873  0.03033
+        363.3    2801   -0.1754   -0.2029   -0.02757  0.02383   -0.00395  0.03089
+        456.0    1383   -0.1605   -0.1704   -0.00986  0.03766   +0.03394  0.04467
+        548.7     561   -0.1036   -0.1418   -0.03826  0.06075   +0.06794  0.08496
+        641.4     183        --        --           (below N_exc floor)
+        734.1      40        --        --           (below N_exc floor)
+        826.8      11        --        --           (below N_exc floor)
+        919.5       2        --        --           (below N_exc floor)
+       1012.2       0        --        --           (below N_exc floor)
+    NULL check |Dxi|/sigma: max 0.80  PASS
+==================================================================================
+Planck — FORECAST: benchmark clusters needed for 3-sigma
+==================================================================================
+  signal  = analytic Delta_xi(u) for ONE cluster (Schechter counts)
+  noise   = MC bootstrap sigma on Delta_xi from 3000 copies, rescaled to one cluster by sqrt(N)
+  N_infl  = the same with variance inflated by 2^2, because Poisson simulations under-scatter
+            the exceedance counts of a clustered sky by ~2x in rms (v2 memo Sec. 10.6).  QUOTE N_infl.
+
+ r/th500         u  Dxi_theory    sigma_1      N(3sig)       N_infl
+     1.0     270.6    -0.00660     3.9411    3.207e+06    1.283e+07
+             363.3    -0.00928     5.3972    3.046e+06    1.219e+07
+             456.0    -0.01501     7.8819    2.481e+06    9.924e+06  <-- best
+
+     1.5     270.6    -0.00345     2.1895    3.622e+06    1.449e+07
+             363.3    -0.00485     2.8455    3.101e+06    1.241e+07
+             456.0    -0.00789     4.1784    2.522e+06    1.009e+07  <-- best
+
+     2.0     270.6    -0.00204     1.4519    4.539e+06    1.816e+07
+             363.3    -0.00287     1.7402    3.314e+06    1.326e+07
+             456.0    -0.00468     2.7237    3.047e+06    1.219e+07  <-- best
+             548.7    -0.00905     5.3207    3.111e+06    1.244e+07
+
+     3.0     270.6    -0.00090     1.0371    1.187e+07    4.749e+07
+             363.3    -0.00127     1.3052    9.556e+06    3.822e+07
+             456.0    -0.00207     2.0628    8.901e+06    3.560e+07
+             548.7    -0.00404     3.3276    6.105e+06    2.442e+07  <-- best
+
+  BEST CONFIGURATION: r < 1.0 theta_500 (= 3.43'), u = 456.0 mJy/beam
+    Delta_xi = -0.01501   sigma_1 = 7.8819
+    N clusters for 3-sigma = 2.481e+06 (Poisson MC), 9.924e+06 (clustering-inflated)
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/planck/planck_lensed_mc.png
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/planck/planck_forecast.png
+
+  Context: the real M5-v2 measurement used 378 PSZ2 pairs and reached sigma(Delta_xi)
+  = 0.158-0.296, against an NFW prediction of 3e-4 to 7e-4 — three orders of magnitude
+  inside the error.  A large N here is the expected and correct answer: it is the
+  quantitative form of the beam-dilution statement, and it is why the paper needs
+  the Herschel and CCAT arms.
+
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/results/planck.npz

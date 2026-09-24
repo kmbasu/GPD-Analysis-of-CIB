@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gpd-analysis-of-cib"
+version = "1.0.0"
+description = "Extreme-value (GPD) statistics of the P(D) distribution of confusion-limited submillimeter maps and its modulation by cluster lensing: code for Basu, Guerrero & Bertoldi (arXiv:2609.19689)"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Kaustuv Basu"},
+    {name = "Andrea Guerrero"},
+    {name = "Frank Bertoldi"},
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+    "astropy>=5.3",
+]
+
+[project.optional-dependencies]
+# the Planck 857 GHz analysis reads HEALPix maps
+planck = ["healpy>=1.16"]
+test = ["pytest>=7"]
+
+[project.urls]
+Paper = "https://arxiv.org/abs/2609.19689"
+Repository = "https://github.com/kmbasu/GPD-Analysis-of-CIB"
+
+# The scripts import `analysis_modules/` and `Simulations/` through relative
+# paths, so `pip install -e .` installs the dependencies only.
+[tool.setuptools]
+packages = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

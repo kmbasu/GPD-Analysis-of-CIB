@@ -1,0 +1,233 @@
+==================================================================================
+simulate_herschel.py — SPIRE 350 um, GPD tail statistics of the CIB
+==================================================================================
+simulate_herschel.py — Herschel/SPIRE 350 um arm of the GPD/CIB-lensing suite
+==============================================================================
+
+Unlensed xi(u) and cluster-lensed Delta_xi(u) for Herschel-SPIRE at 350 um,
+with every instrument parameter taken from the measured GAMA-09 analysis rather
+than from a scaling of the count model.
+
+Supersedes the Herschel panels of `main_sims_unlensed.py` and
+`main_sims_lensed.py`.  All changes implement recommendations of
+`instrument_consistency_audit.md` (2026-08-15); the audit tag is given for each.
+==================================================================================
+Herschel — noise budget at S_min = 1.0 mJy (audit R1), S_cut = 100 mJy
+==================================================================================
+  <Herschel: 25.15" beam, 8.0" pix, sigma_N=5.402, S_cut=100 mJy>
+  provenance: Full_Analysis_Summary_Herschel.md: beam 25.15" (Matchedfilter header, Condon-equivalent); pixel 8.0" (HELP map); sigma_N 5.402 mJy/beam (matched filter, 11.3% cutout scatter); no non-Poisson term needed (model+noise matches SF_IMAGE rms to 7%)
+
+     model   sigma_c   sigma_N  sigma_nonP  Sigma_tot    N_beam    skew  s_split  f_N impl
+ Schechter      7.98      5.40         0.0       9.63       4.8    1.77     1.00     0.677
+       SPL     10.01      5.40         0.0      11.37      33.9    0.95     1.00     0.540
+       DPL      7.58      5.40         0.0       9.31       2.0    2.08     1.00     0.712
+
+  measured core width = 9.00 mJy/beam;  simulated (Schechter) = 9.63  -> ratio 1.070
+  counts fitted over S = 6.0-94.6 mJy; NO renormalisation applied anywhere (audit R4).
+
+  Cross-checks against the measured GAMA-09 decomposition (H3 Sec. 5.5):
+    measured total rms 9.003, minus sigma_N 5.402 -> sky rms 7.202 mJy/beam
+    model sigma_c (Schechter)          7.976  -> model/measured 1.107
+    Nguyen et al. (2010) 350 um: sigma_conf = 6.3 +- 0.4 mJy/beam (plain pixel variance,
+      24.9" beam, effective cut ~80 mJy).  Our model is 25% high there; the CUT DEPENDENCE
+      is reproduced to 4% (audit Sec. 5.2), so the offset is an amplitude and is 1.1 sigma
+      of the joint counts-normalisation ⊕ SPIRE-calibration uncertainty.  NOT corrected.
+----------------------------------------------------------------------------------
+Herschel — benchmark lens apertures
+----------------------------------------------------------------------------------
+NFW benchmark: M_500 = 1.000e+15 Msun at z_l = 0.5, z_s = 2.0
+  -> R_500 = 1.293 Mpc, theta_500 = 3.425', M_vir = 1.7945e+15 Msun, c_vir = 3.503
+  beam = 25.15" = 0.419', theta_500 = 3.425'  -> theta_500 / FWHM = 8.17
+
+ r/theta500  r [arcmin]     <mu>   <ln mu>     beams  peaks/cl
+       0.50       1.713   3.0707    0.6903      46.3      11.6
+       1.00       3.425   1.6572    0.2994     185.1      46.3
+       1.50       5.138   1.3283    0.1680     416.6     104.1
+       2.00       6.850   1.1917    0.1016     740.5     185.1
+
+  peaks/cluster = pi r^2 / (4 Omega_beam): declustered maxima occur at ~1 per 4 beam solid angles, not 1 per beam.
+==================================================================================
+Herschel — UNLENSED xi(u):  80 maps of 256^2 at 8.0" = 25.89 deg^2 total
+==================================================================================
+  thresholds [mJy/beam]: 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 65.0, 75.0
+   Schechter   123134 peaks (0.263/beam)  MC rms    9.64 vs analytic Sigma_tot    9.63  ratio 1.000   [7s]
+              n_exc = 8974, 5575, 3537, 2241, 1473, 970, 655, 307, 123
+         SPL   124250 peaks (0.265/beam)  MC rms   11.37 vs analytic Sigma_tot   11.37  ratio 1.000   [8s]
+              n_exc = 10777, 6374, 3814, 2390, 1626, 1089, 763, 402, 222
+         DPL   122996 peaks (0.263/beam)  MC rms    9.30 vs analytic Sigma_tot    9.31  ratio 0.998   [7s]
+              n_exc = 8033, 4906, 3093, 1951, 1288, 892, 611, 320, 172
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/herschel/herschel_unlensed_xi.png
+
+  For comparison, the measured unmasked xi-hat(u) (H3 Sec. 5.3):
+    u=25 +0.1405  u=35 +0.2104  u=50 +0.3562  u=75 +0.4834
+  and the bright-masked variant, which is the model-comparable one here since
+  the simulation truncates at S_cut = 100 mJy:
+    u=25 +0.0432  u=35 +0.0266  u=50 -0.0803
+----------------------------------------------------------------------------------
+Herschel — analytic $\Delta\xi(u)$ of the benchmark lens
+----------------------------------------------------------------------------------
+ r/th500      model    <mu>      25.0      30.0      35.0      40.0      45.0      50.0      55.0      65.0      75.0
+    0.50  Schechter   3.071  -0.02398  -0.03660  -0.04488  -0.04763  -0.04487  -0.02811  -0.01293  -0.01160   0.00797
+    0.50        SPL   3.071  -0.20825  -0.19328  -0.14791  -0.07976  -0.01741   0.01551   0.02231   0.02807   0.02622
+    0.50        DPL   3.071  -0.06496  -0.06892  -0.06142  -0.04531  -0.02236  -0.00647  -0.00592  -0.00572   0.00777
+  [cache] thc_Herschel_Schechter_89daf27262.pkl
+    1.00  Schechter   1.657  -0.00074  -0.00975  -0.01790  -0.02398  -0.02707  -0.02230  -0.00747  -0.00656  -0.00585
+  [cache] thc_Herschel_SPL_89daf27262.pkl
+    1.00        SPL   1.657  -0.11275  -0.08486  -0.03603   0.01526   0.05200   0.05530   0.03379   0.00202  -0.00734
+  [cache] thc_Herschel_DPL_89daf27262.pkl
+    1.00        DPL   1.657  -0.03008  -0.03374  -0.03115  -0.02369  -0.01373  -0.00287  -0.00260  -0.00250  -0.00299
+  [cache] thc_Herschel_Schechter_89daf27262.pkl
+    1.50  Schechter   1.328   0.00390  -0.00179  -0.00759  -0.01272  -0.01638  -0.01774  -0.00491  -0.00432  -0.00372
+  [cache] thc_Herschel_SPL_89daf27262.pkl
+    1.50        SPL   1.328  -0.06168  -0.04071  -0.00776   0.02179   0.03797   0.02773   0.00125  -0.00223  -0.00403
+  [cache] thc_Herschel_DPL_89daf27262.pkl
+    1.50        DPL   1.328  -0.01720  -0.01978  -0.01851  -0.01423  -0.00839  -0.00162  -0.00147  -0.00140  -0.00167
+  [cache] thc_Herschel_Schechter_89daf27262.pkl
+    2.00  Schechter   1.192   0.00473   0.00107  -0.00296  -0.00687  -0.01009  -0.01193  -0.00338  -0.00299  -0.00253
+  [cache] thc_Herschel_SPL_89daf27262.pkl
+    2.00        SPL   1.192  -0.03820  -0.02249   0.00005   0.01799   0.02600   0.01245  -0.00025  -0.00138  -0.00247
+  [cache] thc_Herschel_DPL_89daf27262.pkl
+    2.00        DPL   1.192  -0.01047  -0.01239  -0.01181  -0.00925  -0.00563  -0.00102  -0.00092  -0.00087  -0.00103
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/herschel/herschel_lensed_theory.png
+==================================================================================
+Herschel — LENSED Monte Carlo: 300 copies of the benchmark, 192^2 cutouts at 8.0" (25.6' across), model = Schechter
+==================================================================================
+  900 cutouts built [17s]
+
+ r/th500  pk/cl lens  pk/cl ctrl  yield est
+    0.50       11.84       11.85      11.57
+    1.00       46.91       47.01      46.28
+    1.50      105.53      105.79     104.14
+    2.00      187.57      187.82     185.14
+
+  aperture r < 0.5 theta_500 = 1.713'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+         25.0    1024   -0.0590   -0.0059   +0.05306  0.04898   +0.10857  0.05705
+         30.0     753   -0.0759   -0.0452   +0.03066  0.05866   +0.19511  0.07378
+         35.0     570   -0.1740   -0.0657   +0.10828  0.07293   +0.21509  0.08765
+         40.0     447   -0.2757   -0.0287   +0.24694  0.10030   +0.28875  0.11295
+         45.0     333   -0.3078   -0.0514   +0.25638  0.13539   +0.44595  0.16211
+         50.0     236        --        --           (below N_exc floor)
+         55.0     175        --        --           (below N_exc floor)
+         65.0     111        --        --           (below N_exc floor)
+         75.0      63        --        --           (below N_exc floor)
+    NULL check |Dxi|/sigma: max 2.75  PASS
+
+  aperture r < 1.0 theta_500 = 3.425'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+         25.0    3042   -0.0025    0.0508   +0.05336  0.02627   +0.04535  0.02988
+         30.0    2083   -0.0259    0.0308   +0.05676  0.03095   +0.06807  0.03970
+         35.0    1451   -0.0525    0.0169   +0.06939  0.03918   +0.02907  0.04400
+         40.0    1027   -0.1092    0.0120   +0.12118  0.04503   +0.07036  0.05217
+         45.0     729   -0.1237    0.0038   +0.12748  0.05523   +0.06728  0.06071
+         50.0     515   -0.1181   -0.0242   +0.09391  0.07593   +0.08317  0.07598
+         55.0     343   -0.1638   -0.1909   -0.02712  0.08957   +0.06806  0.10221
+         65.0     196        --        --           (below N_exc floor)
+         75.0     107        --        --           (below N_exc floor)
+    NULL check |Dxi|/sigma: max 1.71  PASS
+
+  aperture r < 1.5 theta_500 = 5.138'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+         25.0    5984    0.0022    0.0495   +0.04733  0.01950   +0.05263  0.02060
+         30.0    3970    0.0026    0.0356   +0.03299  0.02254   +0.04350  0.02642
+         35.0    2659   -0.0178    0.0179   +0.03562  0.02743   +0.03034  0.02804
+         40.0    1816   -0.0200    0.0084   +0.02834  0.03614   +0.04589  0.03419
+         45.0    1263   -0.0229    0.0108   +0.03363  0.04671   -0.01456  0.04689
+         50.0     857   -0.0499   -0.0302   +0.01979  0.05474   -0.01758  0.06046
+         55.0     567   -0.0803   -0.1482   -0.06789  0.06904   -0.08211  0.08429
+         65.0     307   -0.0670   -0.1621   -0.09517  0.10940   -0.32614  0.12372
+         75.0     150        --        --           (below N_exc floor)
+    NULL check |Dxi|/sigma: max 2.64  PASS
+
+  aperture r < 2.0 theta_500 = 6.850'
+            u   n_exc   xi_ctrl   xi_lens     Dxi_MC       +-   Dxi_NULL       +-
+         25.0    9790    0.0002    0.0457   +0.04555  0.01474   +0.04561  0.01434
+         30.0    6389    0.0038    0.0416   +0.03779  0.01730   +0.03279  0.01724
+         35.0    4184   -0.0086    0.0278   +0.03637  0.01982   +0.02345  0.02135
+         40.0    2774   -0.0143    0.0157   +0.03000  0.02721   +0.04104  0.02920
+         45.0    1877   -0.0175    0.0075   +0.02504  0.03395   -0.00673  0.03499
+         50.0    1268   -0.0416   -0.0096   +0.03202  0.04249   +0.00558  0.04705
+         55.0     822   -0.0288   -0.1191   -0.09034  0.05751   -0.07813  0.06673
+         65.0     424   -0.0427   -0.1388   -0.09616  0.09406   -0.18099  0.09260
+         75.0     203   -0.2536   -0.2395   +0.01405  0.10916   +0.04189  0.11425
+    NULL check |Dxi|/sigma: max 3.18  **FAIL**
+==================================================================================
+Herschel — FORECAST: benchmark clusters needed for 3-sigma
+==================================================================================
+  signal  = analytic Delta_xi(u) for ONE cluster (Schechter counts)
+  noise   = MC bootstrap sigma on Delta_xi from 300 copies, rescaled to one cluster by sqrt(N)
+  N_infl  = the same with variance inflated by 2^2, because Poisson simulations under-scatter
+            the exceedance counts of a clustered sky by ~2x in rms (v2 memo Sec. 10.6).  QUOTE N_infl.
+
+ r/th500         u  Dxi_theory    sigma_1      N(3sig)       N_infl
+     0.5      25.0    -0.02398     0.8484    1.127e+04    4.506e+04
+              30.0    -0.03660     1.0160    6.934e+03    2.774e+04  <-- best
+              35.0    -0.04488     1.2633    7.132e+03    2.853e+04
+              40.0    -0.04763     1.7373    1.198e+04    4.790e+04
+              45.0    -0.04487     2.3451    2.459e+04    9.835e+04
+
+     1.0      25.0    -0.00074     0.4551    3.411e+06    1.364e+07
+              30.0    -0.00975     0.5360    2.723e+04    1.089e+05
+              35.0    -0.01790     0.6786    1.293e+04    5.172e+04
+              40.0    -0.02398     0.7800    9.519e+03    3.807e+04  <-- best
+              45.0    -0.02707     0.9567    1.124e+04    4.496e+04
+              50.0    -0.02230     1.3151    3.130e+04    1.252e+05
+              55.0    -0.00747     1.5513    3.885e+05    1.554e+06
+
+     1.5      25.0    +0.00390     0.3378    6.764e+04    2.706e+05
+              30.0    -0.00179     0.3904    4.270e+05    1.708e+06
+              35.0    -0.00759     0.4751    3.522e+04    1.409e+05
+              40.0    -0.01272     0.6259    2.181e+04    8.723e+04  <-- best
+              45.0    -0.01638     0.8090    2.196e+04    8.782e+04
+              50.0    -0.01774     0.9481    2.570e+04    1.028e+05
+              55.0    -0.00491     1.1958    5.340e+05    2.136e+06
+              65.0    -0.00432     1.8949    1.736e+06    6.942e+06
+
+     2.0      25.0    +0.00473     0.2553    2.623e+04    1.049e+05  <-- best
+              30.0    +0.00107     0.2996    6.995e+05    2.798e+06
+              35.0    -0.00296     0.3433    1.211e+05    4.842e+05
+              40.0    -0.00687     0.4713    4.232e+04    1.693e+05
+              45.0    -0.01009     0.5880    3.054e+04    1.221e+05
+              50.0    -0.01193     0.7359    3.423e+04    1.369e+05
+              55.0    -0.00338     0.9960    7.796e+05    3.118e+06
+              65.0    -0.00299     1.6292    2.669e+06    1.068e+07
+              75.0    -0.00253     1.8907    5.042e+06    2.017e+07
+
+  BEST CONFIGURATION: r < 0.5 theta_500 (= 1.71'), u = 30.0 mJy/beam
+    Delta_xi = -0.03660   sigma_1 = 1.0160
+    N clusters for 3-sigma = 6.934e+03 (Poisson MC), 2.774e+04 (clustering-inflated)
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/herschel/herschel_lensed_mc.png
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/herschel/herschel_forecast.png
+
+  Context: the real H2 measurement used 110 eFEDS clusters of median M_vir = 2.5e14
+  (a factor 7 less massive than this benchmark) and reached sigma(Delta_xi) = 0.022-0.165.
+----------------------------------------------------------------------------------
+Herschel — pixel-scale diagnostic (audit R5)
+----------------------------------------------------------------------------------
+  The data run at FWHM/pix = 25.15/8.0 = 3.14, outside the 4-10 range over which
+  the declustering peak-density calibration was established, and the measured peak
+  density (0.374/beam) exceeds the old 5" simulation's (0.252/beam) by 48%.  Here the
+  same unlensed run is repeated at 5" to isolate the pixelisation effect from the
+  physical one (source clustering, which raises the real density above Poisson).
+==================================================================================
+Herschel [pix5] — UNLENSED xi(u):  80 maps of 410^2 at 5.0" = 25.94 deg^2 total
+==================================================================================
+  thresholds [mJy/beam]: 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 65.0, 75.0
+   Schechter   120039 peaks (0.256/beam)  MC rms    9.60 vs analytic Sigma_tot    9.63  ratio 0.997   [8s]
+              n_exc = 9430, 5826, 3649, 2287, 1475, 968, 621, 264, 106
+         SPL   121283 peaks (0.259/beam)  MC rms   11.37 vs analytic Sigma_tot   11.37  ratio 1.000   [9s]
+              n_exc = 11567, 6896, 4115, 2594, 1726, 1190, 859, 451, 251
+         DPL   119995 peaks (0.256/beam)  MC rms    9.31 vs analytic Sigma_tot    9.31  ratio 1.000   [8s]
+              n_exc = 8778, 5436, 3422, 2198, 1466, 1002, 694, 349, 174
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/figures/herschel/herschel_unlensed_xi_pix5.png
+
+     model  pk/beam @8as  pk/beam @5as     data
+ Schechter       0.2630       0.2559    0.374
+       SPL       0.2654       0.2585    0.374
+       DPL       0.2627       0.2558    0.374
+
+  If the 5" and 8" densities agree, pixelisation is not the cause and the residual
+  is physical (clustering); if they differ, the declustering window is resolution-
+  dependent and the exceedance counts need a correction.
+
+  wrote /sessions/keen-loving-shannon/mnt/GPD_Lensing_Cluster_Mass/Simulations/results/herschel.npz
