@@ -1,7 +1,7 @@
 # This file tells GitHub (the "Cite this repository" button) and Zenodo how to
 # cite this code.  Before each GitHub release, check `version` and
-# `date-released`; after Zenodo has minted the DOI, add it under
-# `identifiers` (see the commented template below).
+# `date-released`.  `doi` is the Zenodo concept DOI, which always resolves to
+# the latest archived release.
 cff-version: 1.2.0
 message: >-
   If you use this code, please cite the paper below (preferred citation) and,
@@ -11,6 +11,7 @@ type: software
 version: 1.0.0
 date-released: 2026-09-24
 license: MIT
+doi: "10.5281/zenodo.22947949"
 authors:
   - family-names: Basu
     given-names: Kaustuv
@@ -36,10 +37,13 @@ keywords:
   - Planck
   - Herschel SPIRE
   - CCAT
-# identifiers:
-#   - type: doi
-#     value: "10.5281/zenodo.XXXXXXX"
-#     description: "Concept DOI of the archived releases (Zenodo)"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.22947949"
+    description: "Concept DOI of the archived releases (Zenodo; resolves to the latest version)"
+  - type: doi
+    value: "10.5281/zenodo.22947950"
+    description: "DOI of release v1.0 (Zenodo)"
 preferred-citation:
   type: article
   title: "Probing submillimeter number counts below the confusion limit: extreme-value statistics of the P(D) distribution and its modulation by gravitational lensing"

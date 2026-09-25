@@ -1,5 +1,7 @@
 # Extreme-value statistics of the P(D) distribution — code release
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22947949.svg)](https://doi.org/10.5281/zenodo.22947949)
+
 Code, curated inputs and result files for
 
 > **K. Basu, A. Guerrero & F. Bertoldi (2026), *Probing submillimeter number counts below the confusion limit: extreme-value statistics of the P(D) distribution and its modulation by gravitational lensing*.** [arXiv:2609.19689](https://arxiv.org/abs/2609.19689)
@@ -157,7 +159,7 @@ All map simulations use explicit seeds. One change was made for the release. The
 
 ## Citation
 
-If you use this code, please cite the paper. To pin the exact code version, also cite the archived release (the DOI badge will appear here once the release is archived on Zenodo):
+If you use this code, please cite the paper and, for the code, the archived software release on Zenodo. The concept DOI [10.5281/zenodo.22947949](https://doi.org/10.5281/zenodo.22947949) always resolves to the latest release; the DOI of v1.0 itself is [10.5281/zenodo.22947950](https://doi.org/10.5281/zenodo.22947950).
 
 ```bibtex
 @article{Basu2026GPD,
@@ -173,7 +175,20 @@ If you use this code, please cite the paper. To pin the exact code version, also
 }
 ```
 
-GitHub's "Cite this repository" button (from `CITATION.cff`) gives the software citation.
+```bibtex
+@software{Basu2026GPDcode,
+  author    = {Basu, Kaustuv and Guerrero, Andrea and Bertoldi, Frank},
+  title     = {Code for ``Probing submillimeter number counts below the confusion
+               limit: extreme-value statistics of the {P(D)} distribution and its
+               modulation by gravitational lensing''},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.22947949},
+  url       = {https://doi.org/10.5281/zenodo.22947949}
+}
+```
+
+GitHub's "Cite this repository" button (from `CITATION.cff`) gives the same software citation.
 
 ## License
 
