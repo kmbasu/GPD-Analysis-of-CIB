@@ -27,11 +27,11 @@ CIB_AGGREGATE_ONLY=1 python Simulations/herschel_null_reseed.py
 
 Useful switches (read by `sim_core`): `CIB_QUICK_TEST=1` (reduced ensembles, not for science), `CIB_CACHE=1` (cache ensembles and scans under `Simulations/tmp/`, so an interrupted run resumes), `CIB_RESULT_DIR` / `CIB_FIGURE_DIR` (write elsewhere, for example to compare a re-run with the shipped files), `CIB_SHOW=1` (display the diagnostic figures instead of writing them).
 
-## The peak-level model curves (Figs. 2–5, 10)
+## The peak-level model curves (Figs. 2–5)
 
 Every model curve that the paper shows against data or Monte Carlo is a simulated *peak-level* curve, because the declustered-peak distribution differs from the pixel P(D) at intermediate thresholds (App. B).
 
-* `paper_figures_peaklevel.py` builds those curves: the peak-level fingerprints (Fig. 3), the beam sweep (Fig. 4), the Δξ validation at pixel and peak level (Fig. 5) and the *Herschel* model curves with the covariance-correct model ranking (Fig. 10).
+* `paper_figures_peaklevel.py` builds those curves: the peak-level fingerprints (Fig. 3), the beam sweep (Fig. 4), the Δξ validation at pixel and peak level (Fig. 5) and, for reference, the Gaussian-beam *Herschel* model curves with truncated counts that Fig. 10 showed in arXiv v1. Since arXiv v2, the Fig. 10 model curves and the χ² of Sect. 5.2 come from the matched-filter and bright-mask forward model `Herschel_analysis/herschel_model_curves.py` (App. D.5); see the top-level README.
 * `export_peaklevel_curves.py` calls those builders and writes the curves, together with the analytic flux-space fingerprints of Fig. 2, into `results/paperfig_peaklevel_curves.npz`, which `paper/make_paper_figures.py` reads. Stages: `CIB_EXPORT=2,3,4,5,10` (the default).
 
 A fresh run of these Monte Carlo curves takes hours. The shipped `paperfig_peaklevel_curves.npz` holds the realization published in the paper. The top-level README ("Seeds and determinism") explains why a fresh run is statistically equivalent but not bit-identical to it.

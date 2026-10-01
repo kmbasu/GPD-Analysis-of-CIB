@@ -25,6 +25,7 @@ Herschel_analysis/data/
 Planck_analysis/results/v2_cache*/
 Herschel_analysis/results/v3_cache/
 Herschel_analysis/results/h2_cache/
+Herschel_analysis/results/h5_cache/
 Simulations/tmp/
 
 # Figures written by re-runs (the paper figures are regenerated into paper/figures/)

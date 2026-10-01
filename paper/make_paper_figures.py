@@ -9,7 +9,8 @@ Reproduces Figs. 1-14, B.1 and E.1 of
     K. Basu, A. Guerrero & F. Bertoldi (2026), "Probing submillimeter number
     counts below the confusion limit: extreme-value statistics of the P(D)
     distribution and its modulation by gravitational lensing",
-    arXiv:2609.19689
+    arXiv:2609.19689 (v2, the version submitted to A&A; the figure numbering
+    is that of v1)
 
 from the result files shipped with this repository.  No Planck or Herschel map
 data and no Monte Carlo re-run is needed: every figure reads the `.npz`/`.json`
@@ -25,10 +26,11 @@ the .tex at scale 1.0.
 Inputs (all relative to the repository root)
 --------------------------------------------
     num_count_fits/num_count_fit_results.json                         Fig. 1
-    Simulations/results/paperfig_peaklevel_curves.npz        Figs. 2-5, 10
+    Simulations/results/paperfig_peaklevel_curves.npz          Figs. 2-5
     Planck_analysis/results/planck_v2_unlensed_857_4.0e+20_gp40.npz Figs. 6-7
     Planck_analysis/results/planck_v2_lensed_857_4.0e+20_gp40_ap1.00.npz 8-9
     Herschel_analysis/results/herschel_unlensed_v3_350.npz           Fig. 10
+    Herschel_analysis/results/herschel_model_curves_350.npz   Fig. 10 models
     Herschel_analysis/results/herschel_peak_sims_350.npz             Fig. 11
     Herschel_analysis/results/herschel_lensed_350.npz                Fig. 12
     Simulations/results/ccat.npz                                  Figs. 13-14
@@ -84,9 +86,15 @@ NPZ_H_SIM = os.path.join(SIM_RES, "herschel.npz")
 NPZ_CCAT = os.path.join(SIM_RES, "ccat.npz")
 NPZ_H_UNL = os.path.join(HERSCH_RES, "herschel_unlensed_v3_350.npz")
 NPZ_H_LEN = os.path.join(HERSCH_RES, "herschel_lensed_350.npz")
+#  Fig. 10 model curves since v16 (2026-09-27): module H5,
+#  `Herschel_analysis/herschel_model_curves.py` -- the three count models with
+#  the observed bright population above S_cut, through the matched-filter
+#  forward model and the data's own baseline/mask/declustering operations.
+NPZ_H_MODELS = os.path.join(HERSCH_RES, "herschel_model_curves_350.npz")
 JSON_COUNTS = os.path.join(_ROOT, "num_count_fits",
                            "num_count_fit_results.json")
-#  Frozen peak-level model curves for Figs. 2, 3, 4, 5 and 10.  Produced by
+#  Frozen peak-level model curves for Figs. 2, 3, 4 and 5 (the stage-10 Herschel
+#  curves it also holds were drawn in Fig. 10 of arXiv v1 only).  Produced by
 #  `Simulations/export_peaklevel_curves.py`, which reads sim_core's Run cache
 #  WITH CIB_CACHE=1 and writes the published realization here.  See that
 #  script: without the cache flag sim_core recomputes and xi-hat moves.
@@ -387,7 +395,8 @@ def fig06_planck_stability():
     ax.axhline(0, color="0.6", lw=0.6)
     ax.set(xlabel=r"threshold $k=(u-\mu_{\rm core})/\sigma_{\rm core}$",
            ylabel=r"$\xi(u)$", xlim=(0.8, 6.3), ylim=(-0.62, 0.34))
-    ax.legend(loc="lower right", ncol=2, fontsize=5.6, columnspacing=0.9)
+    ax.legend(loc="lower center", ncol=3, fontsize=5.4, columnspacing=0.8,
+              handlelength=1.6)
     ax.text(0.025, 0.96, f"857 GHz, {n_cut} cutouts",
             transform=ax.transAxes, va="top", ha="left", fontsize=6.0,
             color="0.3")
@@ -621,13 +630,22 @@ def fig08_planck_dxi(ap="1.5", stacked=False):
                 ms=2.6, capsize=1.3, lw=0.8, label=r"measured $\Delta\xi(u)$")
     ax.plot(k, pred, "-", color="C3", lw=1.0, label="NFW $\\mu$-mixture")
     if np.isfinite(comb):
+        #  95% interval drawn behind the 1-sigma bar (2026-09-27: the audit
+        #  noted that the quoted 0.61 UL was not visible on the panel)
+        ax.errorbar([np.mean(kwin)], [comb], yerr=[ul95], fmt="none",
+                    ecolor="C2", elinewidth=2.2, alpha=0.30, capsize=0,
+                    zorder=2)
         ax.errorbar([np.mean(kwin)], [comb], yerr=[sig], fmt="s", color="C2",
-                    ms=4.5, mfc="none", mew=1.0, capsize=2.0,
+                    ms=4.5, mfc="none", mew=1.0, capsize=2.0, zorder=3,
                     label=(f"combined ${comb:+.3f}\\pm{sig:.3f}$\n"
                            f"95{PC} UL $|\\Delta\\xi|<{ul95:.2f}$"))
     ax.axhline(0, color="0.6", lw=0.6)
+    #  y-range from the data, so no error bar is clipped
+    ylo = np.nanmin(np.concatenate([lo, [comb - ul95] if np.isfinite(comb) else []]))
+    yhi = np.nanmax(np.concatenate([hi, [comb + ul95] if np.isfinite(comb) else []]))
     ax.set(xlabel=r"$k=(u-\mu_{\rm core})/\sigma_{\rm core}$",
-           ylabel=r"$\Delta\xi(u)$", xlim=(0.8, 5.0))
+           ylabel=r"$\Delta\xi(u)$", xlim=(0.8, 5.0),
+           ylim=(ylo - 0.42, yhi + 0.08))   # room for the legend
     ax.legend(loc="lower left", fontsize=5.4)
     ax.text(0.025, 0.96, f"{n_pairs} pairs, $r<{ap}\\,\\theta_{{500}}$",
             transform=ax.transAxes, va="top", fontsize=5.8, color="0.3")
@@ -665,7 +683,7 @@ def fig08_planck_dxi(ap="1.5", stacked=False):
         ax.axhline(1, color="0.6", lw=0.6)
         ax.set(xlabel=r"$k=(u-\mu_{\rm core})/\sigma_{\rm core}$",
                ylabel=r"$\lambda_{\rm cl}/\lambda_{\rm ctrl}$",
-               xlim=(0.8, 5.0), ylim=(-0.3, 3.4))
+               xlim=(0.8, 5.0), ylim=(-0.3, 4.4))
         ax.legend(loc="upper left", fontsize=5.4)
         _tidy(ax)
         for a_, lab in zip(axes, ("(a)", "(b)")):
@@ -732,7 +750,7 @@ def fig09_planck_aperture_dust(ap="1.5"):
            ylabel=r"window-combined $\Delta\xi$", xlim=(0.25, 2.75),
            ylim=(-0.58, 0.50))
     ax.set_xticks(aps)
-    ax.legend(loc="upper left", fontsize=5.4, labelspacing=0.22)
+    ax.legend(loc="lower left", fontsize=5.4, labelspacing=0.22)
     ax.set_title("(a) aperture scan", fontsize=6.6)
     _tidy(ax)
 
@@ -781,7 +799,9 @@ def fig11_h1c_decomposition():
     ax.plot(u, d["d_residual"], "^--", color="k", ms=2.4, lw=0.9,
             label=r"data$-$C: residual")
     ax.axhline(0, color="0.6", lw=0.6)
-    ax.set(xlabel=r"threshold $u$ [mJy/beam]", ylabel=r"$\Delta\xi$")
+    #  Not "Delta xi": that symbol is reserved for the lensing modulation.
+    ax.set(xlabel=r"threshold $u$ [mJy/beam]",
+           ylabel=r"difference in $\hat\xi(u)$")
     ax.legend(loc="upper left", fontsize=5.8)
     _tidy(ax)
     return _save(fig, "herschel_h1c_decomposition")
@@ -869,7 +889,7 @@ def figB1_noise_declustering(force=False):
     _tidy(ax[0])
 
     ax[1].axhline(0.913, color="k", lw=0.8)
-    ax[1].text(0.04, 0.9165, r"Gaussian-field prediction, size-5 filter "
+    ax[1].text(0.04, 0.9165, "Gaussian-field prediction,\nsize-5 filter "
                              r"($q_*=0.913$)", fontsize=5.8, va="bottom")
     ax[1].annotate("noise spikes ride the flanks\nbefore they dominate",
                    xy=(0.27, 0.784), xytext=(0.72, 0.792), fontsize=5.8,
@@ -1256,31 +1276,41 @@ def fig10_herschel_xi():
     """
     print("\n[Fig 10] Herschel xi-hat(u) vs peak-level models")
     D = np.load(NPZ_H_UNL, allow_pickle=True)
-    K = np.load(NPZ_PKCURVES, allow_pickle=False)
+    M = np.load(NPZ_H_MODELS, allow_pickle=True)
+    fid = str(M["fiducial"])
     u = D["u_grid"]
     xi, xie = D["xi_meas"], D["xi_err"]
     xim, xime = D["xi_masked"], D["xierr_masked"]
     umax = float(D["u_max_masked"])
     sel = (u <= umax) & np.isfinite(xim)
-    uf = K["f10_u_fine"]
+    uf = M["u_fine"]
 
     fig, ax = plt.subplots(figsize=(COL, 2.75))
     ax.axvspan(umax, u.max() * 1.03, color=GREY_CORE, zorder=0)
-    ax.text(umax * 1.02, 0.63, "masked variant\ncensored", fontsize=5.4,
+    ax.text(umax * 1.02, 0.63, "outside the\ncomparison window", fontsize=5.4,
             color="0.42", va="top", ha="left")
     for nm in MODEL_ORDER:
-        ax.plot(uf, K[f"f10_curve_{nm}"], MODEL_LS[nm],
+        c, sg = M[f"{fid}_{nm}_xi"], M[f"{fid}_{nm}_sig"]
+        ax.fill_between(uf, c - sg, c + sg, color=MODEL_COLORS[nm],
+                        alpha=0.15, lw=0, zorder=1)
+        ax.plot(uf, c, MODEL_LS[nm],
                 color=MODEL_COLORS[nm], lw=1.1, zorder=2,
-                label=fr"{nm}, $\chi^2$={K[f'f10_chi2_{nm}']:.0f}")
+                label=fr"{nm}, $\chi^2$={float(M[f'{fid}_{nm}_chi2']):.0f}")
     ax.errorbar(u, xi, yerr=xie, fmt="s", ms=2.2, color="k", capsize=1.2,
                 lw=0.7, zorder=4, label="measured, unmasked")
     ax.errorbar(u[sel], xim[sel], yerr=xime[sel], fmt="o", ms=2.4, mfc="w",
                 color="k", capsize=1.2, lw=0.8, zorder=5,
                 label="measured, bright-masked")
+    #  above the comparison window the masked data are shown too (lighter):
+    #  since v16 the models carry the same mask, so the like-for-like
+    #  comparison extends over the whole ladder even though the chi^2 does not
+    out = (~sel) & np.isfinite(xim)
+    ax.errorbar(u[out], xim[out], yerr=xime[out], fmt="o", ms=2.4, mfc="w",
+                color="0.45", capsize=1.2, lw=0.7, zorder=5)
     ax.axhline(0.0, color="0.4", lw=0.6, zorder=1)
     ax.set(xlabel=r"threshold $u$ [mJy/beam]", ylabel=r"$\hat\xi(u)$",
-           xlim=(u.min() * 0.96, u.max() * 1.03), ylim=(-0.30, 0.70))
-    ax.legend(loc="upper left", fontsize=5.8, borderaxespad=0.35)
+           xlim=(u.min() * 0.96, u.max() * 1.03), ylim=(-0.75, 0.70))
+    ax.legend(loc="lower left", fontsize=5.8, borderaxespad=0.35)
     _tidy(ax)
     return _save(fig, "herschel_xi_vs_flux")
 
@@ -1315,6 +1345,14 @@ def fig12_herschel_dxi():
         ax.errorbar(u, d[f"ap{ap}_dxi"], yerr=d[f"ap{ap}_err"], fmt="o",
                     color="k", ms=2.0, capsize=1.2, lw=0.7,
                     label=r"measured $\Delta\xi$")
+        #  Thresholds with fewer than 100 cluster-arm exceedances: plotted and
+        #  included in the inverse-variance combination, but shaded so the
+        #  reader sees where the exceedance floor (50) is approached.
+        ncl = d[f"ap{ap}_n_cl"]
+        near = np.isfinite(d[f"ap{ap}_dxi"]) & (ncl < 100)
+        if near.any():
+            ax.axvspan(u[near].min() - 1.25, u[near].max() + 1.25,
+                       color=GREY_CORE, zorder=0)
         ax.axhline(0, color="0.6", lw=0.6)
         ax.set_xlabel(r"threshold $u$ [mJy/beam]")
         ax.set_title(fr"$r<{float(ap):.1f}\,\theta_{{500}}$", fontsize=7.0)
@@ -1359,8 +1397,16 @@ def fig13_ccat_unlensed():
                           d[f"unl_hi_{nm}"][g] - xi[g]],
                     fmt="o", ms=2.2, color=c, capsize=1.2, lw=0.7)
     ax.axhline(0.0, color="0.4", lw=0.6)
+    #  validity floor 3 sigma_c = 14.3 mJy/beam and the usable discrimination
+    #  window 15-26 mJy/beam (Sect. 6.1), marked directly on the panel
+    sig_c = 4.76
+    ax.axvspan(u.min() * 0.97, 3.0 * sig_c, color=GREY_CORE, zorder=0)
+    ax.axvspan(15.0, 26.0, color=GREEN_WIN, alpha=0.10, zorder=0)
+    ax.axvline(3.0 * sig_c, color="crimson", ls="--", lw=0.7, zorder=1)
+    ax.text(3.0 * sig_c * 1.03, -0.31, r"$u=3\sigma_c$", fontsize=5.6,
+            color="crimson", va="bottom")
     ax.set(xscale="log", xlabel=r"threshold $u$ [mJy/beam]",
-           ylabel=r"$\xi(u)$")
+           ylabel=r"$\xi(u)$", ylim=(-0.40, 0.34))
     _logticks(ax, [6, 10, 20, 40])
     lg = ax.legend(loc="lower left", fontsize=6.0, borderaxespad=0.35)
     ax.add_artist(lg)

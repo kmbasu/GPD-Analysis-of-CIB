@@ -59,6 +59,8 @@ SHIPPED = [
     "Herschel_analysis/results/herschel_peak_sims_350.npz",
     "Herschel_analysis/results/herschel_lensed_350.npz",
     "Herschel_analysis/results/herschel_xid_flux_response_350.npz",
+    "Herschel_analysis/results/herschel_model_curves_350.npz",
+    "Herschel_analysis/results/matchedfilter_kernel_350.npy",
 ]
 
 
@@ -69,6 +71,8 @@ def test_shipped_result_readable(rel):
     if p.endswith(".npz"):
         with np.load(p, allow_pickle=True) as d:
             assert len(d.files) > 0
+    elif p.endswith(".npy"):
+        assert np.load(p).size > 0
     else:
         with open(p) as fh:
             assert json.load(fh)
@@ -79,6 +83,17 @@ def test_peaklevel_export_has_all_stages():
             ROOT, "Simulations/results/paperfig_peaklevel_curves.npz")) as d:
         for prefix in ("f2_", "f3_", "f4_", "f5_", "f10_"):
             assert any(k.startswith(prefix) for k in d.files), prefix
+
+
+def test_herschel_model_curves_chi2():
+    # Sect. 5.2 / Table D.1 of arXiv v2: covariance-correct chi^2 of the
+    # fiducial (filter + mask) model curves against the bright-masked data
+    with np.load(os.path.join(
+            ROOT, "Herschel_analysis/results/herschel_model_curves_350.npz"),
+            allow_pickle=True) as d:
+        fid = str(d["fiducial"])
+        chi2 = [float(d[f"{fid}_{nm}_chi2"]) for nm in ("Schechter", "DPL", "SPL")]
+    assert np.allclose(chi2, [30.1, 138.4, 472.4], atol=0.05), chi2
 
 
 # --------------------------------------------------------------------------

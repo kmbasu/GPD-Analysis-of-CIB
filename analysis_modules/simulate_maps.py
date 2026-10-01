@@ -326,7 +326,31 @@ class CIBMapSimulator:
                  sigma_noise=0.0, s_cut=None, n_bins_per_decade=40,
                  noise_mode="beam", clustering=None, cl_ratio=1.0,
                  ell_eq=2000.0, cl_slope=-1.2, cl_ell_max=None,
-                 cl_q1_ref=None):
+                 cl_q1_ref=None, post_filter=None):
+        #  post_filter (added 2026-09-27): a 2-D kernel K applied to the
+        #  beam-smoothed sky PLUS white noise, exactly as the delivered HELP
+        #  matched filter is applied to the SPIRE image:  m = (sky + w) * K /
+        #  sum(K^2), then divided by the kernel's point-source response R on the
+        #  Gaussian PSF so that a unit source still peaks at 1 (R = 1.0426 for
+        #  the 350 um kernel; App. D).  With the filter on, `sigma_noise` is the
+        #  WHITE per-pixel rms BEFORE the filter (use `white_sigma_for` to set it
+        #  from the wanted filtered rms), `noise_mode` must be "white", and the
+        #  map is generated on a grid padded by one kernel half-width plus 8 px
+        #  and cropped after filtering, so `npix` is the size of the RETURNED map
+        #  and no edge of it carries a convolution artefact.  Both the sky's
+        #  correlation structure (PSF * K, with the kernel's negative sidelobes)
+        #  and the noise's (K alone) then match the filtered data, which the
+        #  default "beam" noise mode -- sky and noise through the same Gaussian
+        #  -- does not: the data's declustered-peak density is 0.374 per beam
+        #  against 0.255 for the default mode (Sect. 5.1 / App. D of the paper).
+        self.npix_out = int(npix)
+        self.post_filter = None
+        if post_filter is not None:
+            if noise_mode != "white":
+                raise ValueError("post_filter requires noise_mode='white'")
+            K = np.asarray(post_filter, float)
+            self._filter_pad = K.shape[0] // 2 + 8
+            npix = int(npix) + 2 * self._filter_pad
         self.cnts, self.npix = cnts, int(npix)
         self.pix_arcsec = float(pix_arcsec)
         self.beam_fwhm_pix = beam_fwhm_arcsec / pix_arcsec
@@ -345,6 +369,17 @@ class CIBMapSimulator:
         #  so s_w = 1 / (sig_b sqrt(pi)) reproduces unit output rms.
         self._sig_b_pix = self.beam_fwhm_pix * FWHM_TO_SIGMA
         self._white_per_unit_beamed = 1.0 / (self._sig_b_pix * np.sqrt(np.pi))
+        if post_filter is not None:
+            from scipy.signal import oaconvolve
+            kn = K / np.sum(K ** 2)                    # uniform-weight HELP operator
+            n = self.npix
+            yy, xx = np.mgrid[:n, :n]
+            c = n // 2
+            psf = np.exp(-((xx - c) ** 2 + (yy - c) ** 2)
+                         / (2.0 * self._sig_b_pix ** 2))
+            self.filter_response = float(oaconvolve(psf, kn, mode="same").max())
+            self.post_filter = kn / self.filter_response
+            self._kernel_sum2 = float(np.sum(K ** 2))
         self.s_cut = s_cut
         # log-spaced flux bins spanning the (lensed) support generously
         s_lo, s_hi = cnts.s_min, (s_cut if s_cut else cnts.s_max)
@@ -506,6 +541,8 @@ class CIBMapSimulator:
                 np.add.at(flat, np.minimum(idx, flat.size - 1), s)
             raw = flat.reshape(self.npix, self.npix)
         else:
+            if self.post_filter is not None and lens_center is not None:
+                lens_center = tuple(float(c) + self._filter_pad for c in lens_center)
             mu = lens.mu_map(self.npix, self.pix_arcsec, center=lens_center)
             inv_mu2 = mu ** -2
             for s, ds in zip(self.s_mid, self.ds):
@@ -536,9 +573,22 @@ class CIBMapSimulator:
                                self.sigma_noise * self._white_per_unit_beamed,
                                smooth.shape)
                 smooth += gaussian_beam_convolve(w, self.beam_fwhm_pix)
+        if self.post_filter is not None:
+            from scipy.signal import oaconvolve
+            p = self._filter_pad
+            smooth = oaconvolve(smooth, self.post_filter, mode="same")[p:-p, p:-p]
+            raw = raw[p:-p, p:-p]
         if mean_subtract:
             smooth -= smooth.mean()
         return (smooth, raw) if return_unsmoothed else smooth
+
+    def white_sigma_for(self, sigma_filtered):
+        """White per-pixel rms (before the post-filter) that gives a filtered,
+        response-normalized noise rms of `sigma_filtered` mJy/beam:
+        sigma_w = sigma_filtered * R * sqrt(sum K^2)."""
+        if self.post_filter is None:
+            return float(sigma_filtered)
+        return float(sigma_filtered) * self.filter_response * np.sqrt(self._kernel_sum2)
 
     # ---- helpers ------------------------------------------------------------
     @staticmethod

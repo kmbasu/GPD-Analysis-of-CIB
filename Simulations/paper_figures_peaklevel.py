@@ -172,8 +172,20 @@ def figure_herschel(u_fine=None, n_maps=200, seed=31000):
             return declustered_peaks(sim.make_map(seed=seed + 7919 * i), bfp)
 
         peaks = build_ensemble(run, f"pkcurve_{nm}", one, n_maps)
+        #  max_pooled: UNTHINNED, as in `figure_fingerprints_peak` and as
+        #  App. E.3 of the paper states for every reported scan.  Before
+        #  2026-09-25 this call inherited sim_core.MAX_POOLED_PEAKS = 60 000
+        #  and the ~307k-peak pools were thinned to ~20%, which biased the
+        #  curves low by up to 0.12 above the ranking window (<= 0.014 inside
+        #  it).  The unthinned scan gives chi^2 = 16.1 / 109.2 / 257.6 for
+        #  Schechter / DPL / SPL (the arXiv v1 values 19.3 / 143.8 / 309.3 were
+        #  thinned).  Since arXiv v2 the paper's Fig. 10 and the chi^2 of
+        #  Sect. 5.2 (30.1 / 138.4 / 472.4) come instead from the matched-filter
+        #  and bright-mask forward model, Herschel_analysis/herschel_model_curves.py;
+        #  this Gaussian-beam, truncated-counts curve is kept for reference.
         scan = run.cached(f"pkscan_{nm}", blocked_scan, peaks, u_fine,
-                          n_boot=120, min_exceed=80, seed=sc.stable_seed(nm))
+                          n_boot=120, min_exceed=80, seed=sc.stable_seed(nm),
+                          max_pooled=5_000_000)
         curves[nm] = scan["xi"]
         npk = sum(p.size for p in peaks)
         print(f"    {nm:>10s}  {npk:8d} peaks   "

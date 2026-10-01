@@ -22,6 +22,7 @@ The unlensed analysis uses the eFEDS catalog to keep its cutouts at least 5′ f
 | `noise_analysis.py` | App. D: reproduces the HELP matched-filter operator exactly (MFILT = [(d/σ²)∗K]/[(1/σ²)∗K²], correlation 1.0000000), the noise budget, the lag-one autocorrelation, the point-source response | `herschel_noise_analysis_350.npz` | 15 s |
 | `herschel_unlensed_v3.py` | Sect. 5.2, Fig. 10 (data), App. E: self-filtered cutouts, ξ̂(u), three count models, bright-source masked variant, threshold covariance | `herschel_unlensed_v3_350.npz` | 1 min |
 | `herschel_peak_sims.py` | Sect. 5.3, Fig. 11: forward simulation separating the pixel-to-peak effect from the bright lensed population | `herschel_peak_sims_350.npz` | 1 min |
+| `herschel_model_curves.py` | Sect. 5.2, Fig. 10: the three count models forward-modeled through the matched filter and the data's bright mask (module H5; App. D.5) | `herschel_model_curves_350.npz` | 3 min |
 | `herschel_lensed.py` | Sect. 5.4, Fig. 12: Δξ(u) over 110 eFEDS cluster/control pairs, null tests, upper limits | `herschel_lensed_350.npz` | 1–2 min |
 | `herschel_xid_flux_response.py` | App. D: peak flux in the self-filtered map against XID+ fluxes of 132 isolated sources (ratio 1.04) | `herschel_xid_flux_response_350.npz` | 5 s |
 

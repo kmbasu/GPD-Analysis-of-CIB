@@ -43,7 +43,10 @@ Stage keys: 2 = ideal flux-space fingerprints (draft Fig. 2)
             3 = peak-level fingerprints, SPIRE beam (draft Fig. 3)
             4 = beam sweep, illustrative DPL (draft Fig. 4)
             5 = Delta_xi validation, pixel and peak conventions (Fig. 5)
-            10 = Herschel measured xi-hat with peak-level curves (draft Fig. 10)
+            10 = Herschel measured xi-hat with peak-level curves (Fig. 10 of
+                 arXiv v1 only; since v2 the Fig. 10 model curves come from
+                 Herschel_analysis/herschel_model_curves.py, and these are
+                 kept for reference)
 
 Requires numpy, scipy, matplotlib, astropy, plus `sim_core`, `counts_350um`
 and `analysis_modules` on the path.
@@ -73,9 +76,11 @@ os.environ.setdefault("CIB_FIGS", "none")
 #  recomputes every `run.cached(...)` result -- including `blocked_scan`, whose
 #  RNG drives the rate-thinning of over-large pools and therefore moves xi-hat
 #  itself, not just the bootstrap band.  Running this exporter without the
-#  cache produced Herschel chi^2 = 28.7 / 240.7 / 140.7 where the published
-#  Fig. 10 and Sect. 5.2 quote 19.3 / 309.3 / 143.8: a different, equally valid
-#  realization, but NOT the one the paper reports.  The environment variable
+#  cache produced Herschel chi^2 = 28.7 / 240.7 / 140.7 where Fig. 10 and
+#  Sect. 5.2 of arXiv v1 quoted 19.3 / 309.3 / 143.8 (Schechter / SPL / DPL):
+#  a different, equally valid realization, but NOT the one v1 reported.  (The
+#  stage-10 numbers are historical: see the top-level README, "Correction after
+#  arXiv v1" and "Second correction".)  The environment variable
 #  must therefore be set BEFORE `sim_core` is imported and its module-level
 #  USE_CACHE is evaluated.  Set CIB_CACHE=0 explicitly only to deliberately
 #  regenerate the ensembles from scratch (hours).

@@ -4,7 +4,7 @@
 
 Code, curated inputs and result files for
 
-> **K. Basu, A. Guerrero & F. Bertoldi (2026), *Probing submillimeter number counts below the confusion limit: extreme-value statistics of the P(D) distribution and its modulation by gravitational lensing*.** [arXiv:2609.19689](https://arxiv.org/abs/2609.19689)
+> **K. Basu, A. Guerrero & F. Bertoldi (2026), *Probing submillimeter number counts below the confusion limit: extreme-value statistics of the P(D) distribution and its modulation by gravitational lensing*.** [arXiv:2609.19689](https://arxiv.org/abs/2609.19689) (v2: the version submitted to A&A)
 
 The paper fits a generalized Pareto distribution (GPD) to the upper tail of the one-point distribution P(D) of confusion-limited submillimeter maps. The shape parameter ξ(u) above a threshold u reads the local logarithmic slope of the source counts dN/dS near S ≈ u, including below the confusion limit. Gravitational lensing by a foreground cluster modulates the tail, Δξ(u). The method is validated on simulations and applied to *Planck* 857 GHz and *Herschel*/SPIRE 350 µm data, with a forecast for CCAT/FYST. This repository contains:
 
@@ -38,7 +38,7 @@ No survey data are included. Where the data come from and where to put them is d
 │   ├── simulate_planck.py  simulate_herschel.py  simulate_ccat.py     the three-instrument ladder
 │   ├── ccat_beam_vs_sensitivity.py   beam x sensitivity factorial (Sect. 6.3)
 │   ├── herschel_null_reseed.py       null-seed ensemble (App. E, Fig. E.1)
-│   ├── paper_figures_peaklevel.py    peak-level model curves (Figs. 2-5, 10)
+│   ├── paper_figures_peaklevel.py    peak-level model curves (Figs. 2-5)
 │   ├── export_peaklevel_curves.py    freezes those curves into results/paperfig_peaklevel_curves.npz
 │   ├── validation/                   declustering (App. B, C) and clustering (App. F) checks
 │   └── results/                      shipped outputs (.npz, .json, .log)
@@ -50,6 +50,7 @@ No survey data are included. Where the data come from and where to put them is d
 │
 ├── Herschel_analysis/       Herschel/SPIRE 350 um, GAMA-09 (see Herschel_analysis/README.md)
 │   ├── noise_analysis.py  herschel_unlensed_v3.py  herschel_peak_sims.py
+│   ├── herschel_model_curves.py          Fig. 10 model curves (forward model, App. D.5)
 │   ├── herschel_lensed.py  herschel_xid_flux_response.py
 │   └── results/                          shipped outputs
 │
@@ -89,7 +90,7 @@ python -m pytest tests -q                 # release checks (~2 min; the Planck s
 
 ## Paper figures and tables → scripts
 
-Figure and table numbers refer to arXiv:2609.19689v1. The figures are drawn by `paper/make_paper_figures.py` from the file listed under "data"; the script that writes that file is listed under "computed by". Development docstrings sometimes use earlier ("draft") figure numbers; this table is the correspondence.
+Figure and table numbers refer to arXiv:2609.19689v2, the version submitted to A&A. The numbering is the same as in v1; v2 adds App. D.5 and Table D.1. The figures are drawn by `paper/make_paper_figures.py` from the file listed under "data"; the script that writes that file is listed under "computed by". Development docstrings sometimes use earlier ("draft") figure numbers; this table is the correspondence.
 
 | paper | content | computed by | data |
 |---|---|---|---|
@@ -104,7 +105,7 @@ Figure and table numbers refer to arXiv:2609.19689v1. The figures are drawn by `
 | Figs. 6, 7 | *Planck* unlensed ξ̂(u), mean excess, nulls | `Planck_analysis/planck_unlensed_pd_v2.py` | `planck_v2_unlensed_857_4.0e+20_gp40.npz` |
 | Figs. 8, 9 | *Planck* lensed Δξ, amplitude channel, apertures, dust | `Planck_analysis/planck_lensed_pd_v2.py` (`CIB_MIN_VALID_AP=1.0`) | `planck_v2_lensed_857_4.0e+20_gp40_ap1.00.npz` |
 | Sects. 4.4–4.5 (378-pair sample) | looser 97 % coverage sample | `planck_lensed_pd_v2.py` (default) | `planck_v2_lensed_857_4.0e+20_gp40.npz` |
-| Fig. 10 | *Herschel* ξ̂(u) with peak-level model curves | `Herschel_analysis/herschel_unlensed_v3.py`; curves: export stage 10 | `herschel_unlensed_v3_350.npz`, `paperfig_peaklevel_curves.npz` |
+| Fig. 10 | *Herschel* ξ̂(u) with forward-modeled count models | `Herschel_analysis/herschel_unlensed_v3.py`; curves: `Herschel_analysis/herschel_model_curves.py` | `herschel_unlensed_v3_350.npz`, `herschel_model_curves_350.npz` |
 | Fig. 11 | why ξ̂(u) rises (forward simulation) | `Herschel_analysis/herschel_peak_sims.py` | `herschel_peak_sims_350.npz` |
 | Fig. 12 | *Herschel* lensed Δξ, eFEDS clusters | `Herschel_analysis/herschel_lensed.py` | `herschel_lensed_350.npz` |
 | Figs. 13, 14, Table 4 | CCAT/FYST forecast; N₃σ (all three instruments) | `simulate_ccat.py` (+ `simulate_planck.py`, `simulate_herschel.py` for Table 4) | `ccat.npz`, `*.log` |
@@ -114,6 +115,7 @@ Figure and table numbers refer to arXiv:2609.19689v1. The figures are drawn by `
 | Fig. B.1 | noise and declustering | `paper/make_paper_figures.py` (small seeded simulation, ~10 s) | computed on the fly |
 | App. C | 2D Gaussian-random-field peak statistics (q* = 0.913) | `Simulations/validation/verify_memo_numbers.py`, `check_peak_shift.py` | printed |
 | App. D | matched filter, noise budget, flux response | `Herschel_analysis/noise_analysis.py`, `herschel_xid_flux_response.py` | `herschel_noise_analysis_350.npz`, `herschel_xid_flux_response_350.npz` |
+| App. D.5, Table D.1 | forward model of the filtered map and the bright mask; χ² in four conventions | `Herschel_analysis/herschel_model_curves.py` | `herschel_model_curves_350.npz` (printed table) |
 | App. E, Fig. E.1 | threshold covariance; null-seed ensemble | `herschel_unlensed_v3.py`, `planck_unlensed_pd_v2.py`; `Simulations/herschel_null_reseed.py` | `herschel_null_seeds.json` |
 | Table F.1 | core–tail contrast | `Simulations/validation/core_tail_contrast.py` | printed |
 
@@ -121,7 +123,7 @@ Figure and table numbers refer to arXiv:2609.19689v1. The figures are drawn by `
 
 ## Reproducing the results: three levels
 
-**(a) Figures from the shipped results (seconds, no data).** `python paper/make_paper_figures.py`. In the release check, 14 of the 16 figures were pixel-identical to the PDFs in the arXiv submission. In the other two (Figs. 5 and 11) the plotted data are identical and only the typesetting of the axis labels differs.
+**(a) Figures from the shipped results (seconds, no data).** `python paper/make_paper_figures.py`. Checked against the arXiv v2 (A&A) submission: 15 of the 16 figures are pixel-identical to its PDFs. In the other one (Fig. 5) the plotted data are identical and only the typesetting of the axis labels differs. `Herschel_analysis/herschel_model_curves.py` (about 3 min) and `herschel_peak_sims.py` (about 1 min) also need no survey data, and re-running them reproduces the shipped Fig. 10 and Fig. 11 result files to floating-point precision.
 
 **(b) Simulations and validation (minutes to hours, no data).** The scripts in `Simulations/` and `Simulations/validation/` need no survey data. See `Simulations/README.md` for the run order and run times. The validation scripts reproduce the numbers quoted in Appendices B, C and F. Tables F.2 and F.3 are reproduced digit for digit.
 
@@ -130,6 +132,14 @@ Figure and table numbers refer to arXiv:2609.19689v1. The figures are drawn by `
 ### Seeds and determinism
 
 All map simulations use explicit seeds. One change was made for the release. The bootstrap and pool-thinning seed of the simulation engine was `hash(model_name) % 9973`, and Python randomizes string hashes per interpreter session. A fresh run of `sim_core`-based scripts was therefore a statistically equivalent but not bit-identical realization of the published one. The release uses a stable CRC32 seed (`sim_core.stable_seed`), so fresh runs are now deterministic. They do not reproduce the published realization bit for bit, because its seeds cannot be recovered. The map ensembles themselves, and all lensed and theory quantities (Tables 2 and 4, Figs. 5 and 14), are unaffected. For example, a fresh `simulate_ccat.py` reproduces `ccat.npz` exactly except for the unlensed ξ̂(u) curves, which change at the level of the pool-thinning noise, mostly within the plotted 68 % bootstrap band. The published peak-level curves are shipped in `Simulations/results/paperfig_peaklevel_curves.npz`, and the figures are drawn from them.
+
+### Changes since release v1.0 (arXiv v1)
+
+**Correction after arXiv v1 (2026-09-25).** The Fig. 10 model curves in arXiv v1 were computed from a pool of declustered peaks that `sim_core.blocked_scan` had thinned to its default cap of 60 000 (about 20 % of the 200-map ensembles), contrary to the statement in App. E.3 that all reported scans are unthinned; the Fig. 3 curves were unthinned. `paper_figures_peaklevel.figure_herschel` now passes `max_pooled=5_000_000`, the shipped `paperfig_peaklevel_curves.npz` carries the unthinned stage-10 curves, and the covariance-correct χ² of Sect. 5.2 are 16.1 / 109.2 / 257.6 (Schechter / DPL / SPL) in place of the v1 values 19.3 / 143.8 / 309.3. The ranking is unchanged; the curves move by ≤ 0.014 inside the 25–50 mJy/beam comparison window and by up to 0.12 above it. The y-axis label of Fig. 11 was changed from Δξ (reserved for the lensing modulation) to "difference in ξ̂(u)".
+
+**Second correction (2026-09-27, manuscript v16).** Two further findings of the same audit changed the Herschel forward model. (i) The filtered map's sky response is PSF ∗ K and its noise is white ∗ K, both less correlated than a Gaussian-beam field; simulating both through the same Gaussian beam under-predicts the declustered-peak density by 32 % (0.255 vs 0.374 per beam). `CIBMapSimulator` now has a `post_filter` option that applies the delivered HELP kernel (`Herschel_analysis/results/matchedfilter_kernel_350.npy`, HDU 8 of the map) to sky plus white noise, reproducing the data's autocorrelation and peak density; `herschel_peak_sims.py` uses it by default (`CIB_SIM_FILTER=1`). (ii) Masking the map above 100 mJy/beam is not equivalent to truncating the injected counts (a hard endpoint in map units versus a soft edge), so the Fig. 10 model curves are now produced by the new module `Herschel_analysis/herschel_model_curves.py` (H5): intrinsic counts below S_cut plus the observed bright population above it, the filter forward model, and the data's own baseline removal, mask, declustering and core anchoring. The covariance-correct χ² of Sect. 5.2 are now 30.1 / 138.4 / 472.4 (Schechter / DPL / SPL); App. D.5 of the paper gives the four conventions. The stage-10 curves in `paperfig_peaklevel_curves.npz` are retained for reference but no longer drawn.
+
+**Figures of arXiv v2.** Besides Figs. 10 and 11, `paper/make_paper_figures.py` now draws the 95 % interval of the combined *Planck* Δξ in Fig. 8 (y-range opened so that no error bar is clipped), shades the near-floor thresholds (fewer than 100 cluster-arm exceedances) in Fig. 12, and marks the validity floor u = 3σ_c and the 15–26 mJy/beam discrimination window in Fig. 13. Legend placement and axis ranges were adjusted in Figs. 6, 8, 9, 10, 13 and B.1.
 
 `sim_core` can also cache its ensembles and scans (`CIB_CACHE=1`, under `Simulations/tmp/`). The caches are not shipped: they are large, and only the exported results are needed.
 

@@ -218,6 +218,16 @@ N_SIM = int(os.environ.get("CIB_N_SIM_MAPS", "40" if QUICK else "500"))
 S_CUT_MJY = float(os.environ.get("CIB_SCUT_MJY", "100.0"))
 S_MIN_MJY = float(os.environ.get("CIB_SMIN_MJY", "1.0"))
 V2_NPZ = os.path.join(FIGURE_DIR, "herschel_unlensed_v2_350.npz")
+#  CIB_SIM_FILTER=1 (implemented 2026-09-27; the paper's fiducial since v16):
+#  simulate the beam-smoothed sky plus WHITE noise and apply the delivered HELP
+#  matched-filter kernel (HDU 8 of the map; results/matchedfilter_kernel_350.npy)
+#  through CIBMapSimulator(post_filter=...), so that the sky's and the noise's
+#  correlation structures match the filtered data.  With "0" both go through
+#  the same Gaussian beam (the arXiv-v1 convention), which under-predicts the
+#  declustered-peak density by 32% (0.255 vs 0.374 per beam).
+SIM_FILTER = os.environ.get("CIB_SIM_FILTER", "1") == "1"
+KERNEL_NPY = os.path.join(FIGURE_DIR, "matchedfilter_kernel_350.npy")
+KERNEL = np.load(KERNEL_NPY) if SIM_FILTER else None
 
 os.makedirs(FIGURE_DIR, exist_ok=True)
 MAD2SIG = 1.4826
@@ -407,8 +417,16 @@ LEGS = {
 }
 SIM = {}
 for name, cfg in LEGS.items():
-    sim = CIBMapSimulator(cfg["counts"], FWHM, PIX, npix=SIDE,
-                          sigma_noise=SIGMA_INST, noise_mode="beam")
+    if SIM_FILTER:
+        _s0 = CIBMapSimulator(cfg["counts"], FWHM, PIX, npix=SIDE,
+                              sigma_noise=0.0, noise_mode="white",
+                              post_filter=KERNEL)
+        sim = CIBMapSimulator(cfg["counts"], FWHM, PIX, npix=SIDE,
+                              sigma_noise=_s0.white_sigma_for(SIGMA_INST),
+                              noise_mode="white", post_filter=KERNEL)
+    else:
+        sim = CIBMapSimulator(cfg["counts"], FWHM, PIX, npix=SIDE,
+                              sigma_noise=SIGMA_INST, noise_mode="beam")
     pk_by_map, px_by_map, npk = [], [], 0
     for j in range(N_SIM):
         m = sim.make_map(seed=SEED + 100000 * list(LEGS).index(name) + j)
@@ -507,7 +525,8 @@ RES.update(u_grid=U_GRID, xi_data=XI_DATA, xi_err=XIERR_DATA,
            chi2_C=chi2_C, n_sim=N_SIM,
            peak_density_sim=SIM["B_peak_truncated"]["peak_density"],
            peak_density_data=NPK_DATA / (NC_DATA * (SIDE - 2 * EDGE) ** 2 / BEAM_PIX),
-           validation_ok=bool(VAL_OK))
+           validation_ok=bool(VAL_OK), sim_filter=bool(SIM_FILTER),
+           filter_response=(float(sim.filter_response) if SIM_FILTER else 1.0))
 
 
 #%% -------------------------------- cell 5: figures --------------------------
